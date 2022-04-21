@@ -228,26 +228,32 @@ public class Lobby {
             //X winner
             assert line != null;
             if (Objects.equals(result, "X")) {
-                gameLabel.setText("X won!");
-                ScoreBoardX.setText("" + ++xWin);
-                //updateGameHistory("X");
-                gameEnd(winningLabels);
+                Platform.runLater(() -> {
+                            gameLabel.setText("X won!");
+                            ScoreBoardX.setText("" + ++xWin);
+                            //updateGameHistory("X");
+                            gameEnd(winningLabels);
+                        });
                 a=8;
             }
             //O winner
             else if (Objects.equals(result, "O")) {
-                gameLabel.setText("O won!");
-                ScoreBoardO.setText("" + ++oWin);
-                //updateGameHistory("O");
-                gameEnd(winningLabels);
+                Platform.runLater(() -> {
+                            gameLabel.setText("O won!");
+                            ScoreBoardO.setText("" + ++oWin);
+                            //updateGameHistory("O");
+                            gameEnd(winningLabels);
+                        });
                 a=8;
             }
             // Draw
             else if(Objects.equals(result, "D")) {
-                gameLabel.setText("Draw Game");
-                ScoreBoardDraw.setText("" + ++draw);
-                updateGameHistory("Draw");
-                gameEnd(null);
+                Platform.runLater(() -> {
+                    gameLabel.setText("Draw Game");
+                    ScoreBoardDraw.setText("" + ++draw);
+                    updateGameHistory("Draw");
+                    gameEnd(null);
+                });
             }
         }
     }
