@@ -288,8 +288,9 @@ public class Lobby {
     public char [] createBoard() {
         char [] boardState = new char[9];
         for (int i = 0; i < 9; ++i) {
-            if (!box.get(i).getText().isEmpty())
+            if (!box.get(i).getText().isEmpty()) {
                 boardState[i] = box.get(i).getText().charAt(0);
+            } else boardState[i] = '\0';
         }
         return boardState;
     }
