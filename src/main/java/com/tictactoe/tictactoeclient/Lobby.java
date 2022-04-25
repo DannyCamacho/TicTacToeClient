@@ -148,7 +148,7 @@ public class Lobby {
         tiles.forEach(stackPane -> stackPane.setDisable(false));
         box.forEach(label -> label.setText(""));
         winningLine.setVisible(false);
-        String playerTurn = currentPlayer == 'X' ? "Player O's turn" : "Player X's turn";
+        String playerTurn = currentPlayer == playerToken ? "Your Turn" : "Waiting for Opponent";
         gameLabel.setText(playerTurn);
     }
 
@@ -170,7 +170,7 @@ public class Lobby {
 
     public void setPlayerSymbol(Label label){
         label.setText(currentPlayer + "");
-        String playerTurn = currentPlayer == 'X' ? "Player O's turn" : "Player X's turn";
+        String playerTurn = currentPlayer == playerToken ? "Your Turn" : "Waiting for Opponent";
         gameLabel.setText(playerTurn);
     }
 

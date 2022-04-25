@@ -47,7 +47,7 @@
                 <Font name="Palatino Linotype" size="20.0" />
             </font>
         </Label>
-        <Button layoutX="14.0" layoutY="18.0" mnemonicParsing="false" onAction="#switchMenuScene" text="Main Menu" />
+        <Button layoutX="14.0" layoutY="18.0" mnemonicParsing="false" onAction="#switchMenuScene" text="Main Menu" visible="false" />
         <Button layoutX="333.0" layoutY="149.0" mnemonicParsing="false" onAction="#resetBoard" text="Reset Game" />
         <Button layoutX="332.0" layoutY="188.0" mnemonicParsing="false" onAction="#resetScore" text="Reset Scores" />
         <Button fx:id="startButton" layoutX="335.0" layoutY="111.0" mnemonicParsing="false" onAction="#startingGame" text="Start Game" />
