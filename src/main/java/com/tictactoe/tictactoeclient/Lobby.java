@@ -132,7 +132,6 @@ public class Lobby {
     private int xWin, oWin, draw;
     private char startingPlayer = 'O';
     private char currentPlayer = 'O';
-    private String gamestate;
 
     public void initialize() {
         box = new ArrayList<>(Arrays.asList(box1, box2, box3, box4, box5, box6, box7, box8, box9));
@@ -143,17 +142,12 @@ public class Lobby {
 
     @FXML
     void startingGame(ActionEvent event) {
-//        notifyObservers(0,'C');
-        //controller.setPlayer(controller.getStartingPlayer());
         startButton.setVisible(false);
         tiles.forEach(stackPane -> stackPane.setDisable(false));
         box.forEach(label -> label.setText(""));
         winningLine.setVisible(false);
-//        gameLabel.setText("Player " + controller.getStartingPlayer() + "'s turn");
-//        if(!controller.getTwoPlayer()) {
-//            if (controller.getStartingPlayer() == 'X') setComputerMove();
-//        }
-//        controller.changeStartingPlayer();
+        String playerTurn = currentPlayer == 'X' ? "Player O's turn" : "Player X's turn";
+        gameLabel.setText(playerTurn);
     }
 
     @FXML
@@ -199,61 +193,40 @@ public class Lobby {
     public void checkIfGameIsOver(String result){
         if (Objects.equals(result, "N")) return;
 
-        for (int a = 0; a < 8; a++) {
-            String line = switch (a) {
-                case 0 -> box1.getText() + box2.getText() + box3.getText();
-                case 1 -> box4.getText() + box5.getText() + box6.getText();
-                case 2 -> box7.getText() + box8.getText() + box9.getText();
-                case 3 -> box1.getText() + box5.getText() + box9.getText();
-                case 4 -> box3.getText() + box5.getText() + box7.getText();
-                case 5 -> box1.getText() + box4.getText() + box7.getText();
-                case 6 -> box2.getText() + box5.getText() + box8.getText();
-                case 7 -> box3.getText() + box6.getText() + box9.getText();
-                default -> null;
-            };
+        if(Objects.equals(result, "D")) {
+            Platform.runLater(() -> {
+                gameLabel.setText("Draw Game");
+                ScoreBoardDraw.setText("" + ++draw);
+                updateGameHistory("Draw");
+                gameEnd(null);
+                return;
+            });
+        }
 
-            List<StackPane> winningLabels = new ArrayList<>();
-            switch (a) {
-                case 0 -> { winningLabels.add(tile1); winningLabels.add(tile2); winningLabels.add(tile3);}
-                case 1 -> { winningLabels.add(tile4); winningLabels.add(tile5); winningLabels.add(tile6);}
-                case 2 -> { winningLabels.add(tile7); winningLabels.add(tile8); winningLabels.add(tile9);}
-                case 3 -> { winningLabels.add(tile1); winningLabels.add(tile5); winningLabels.add(tile9);}
-                case 4 -> { winningLabels.add(tile3); winningLabels.add(tile5); winningLabels.add(tile7);}
-                case 5 -> { winningLabels.add(tile1); winningLabels.add(tile4); winningLabels.add(tile7);}
-                case 6 -> { winningLabels.add(tile2); winningLabels.add(tile5); winningLabels.add(tile8);}
-                case 7 -> { winningLabels.add(tile3); winningLabels.add(tile6); winningLabels.add(tile9);}
-            }
+        List<StackPane> winningLabels = new ArrayList<>();
+        switch (result.charAt(1)) {
+            case 0 -> { winningLabels.add(tile1); winningLabels.add(tile2); winningLabels.add(tile3); }
+            case 1 -> { winningLabels.add(tile4); winningLabels.add(tile5); winningLabels.add(tile6); }
+            case 2 -> { winningLabels.add(tile7); winningLabels.add(tile8); winningLabels.add(tile9); }
+            case 3 -> { winningLabels.add(tile1); winningLabels.add(tile5); winningLabels.add(tile9); }
+            case 4 -> { winningLabels.add(tile3); winningLabels.add(tile5); winningLabels.add(tile7); }
+            case 5 -> { winningLabels.add(tile1); winningLabels.add(tile4); winningLabels.add(tile7); }
+            case 6 -> { winningLabels.add(tile2); winningLabels.add(tile5); winningLabels.add(tile8); }
+            case 7 -> { winningLabels.add(tile3); winningLabels.add(tile6); winningLabels.add(tile9); }
+        }
 
-            //X winner
-            assert line != null;
-            if (Objects.equals(result, "X")) {
-                Platform.runLater(() -> {
-                            gameLabel.setText("X won!");
-                            ScoreBoardX.setText("" + ++xWin);
-                            //updateGameHistory("X");
-                            gameEnd(winningLabels);
-                        });
-                a=8;
-            }
-            //O winner
-            else if (Objects.equals(result, "O")) {
-                Platform.runLater(() -> {
-                            gameLabel.setText("O won!");
-                            ScoreBoardO.setText("" + ++oWin);
-                            //updateGameHistory("O");
-                            gameEnd(winningLabels);
-                        });
-                a=8;
-            }
-            // Draw
-            else if(Objects.equals(result, "D")) {
-                Platform.runLater(() -> {
-                    gameLabel.setText("Draw Game");
-                    ScoreBoardDraw.setText("" + ++draw);
-                    updateGameHistory("Draw");
-                    gameEnd(null);
-                });
-            }
+        if (result.charAt(0) == 'X') {
+            Platform.runLater(() -> {
+                gameLabel.setText("X won!");
+                ScoreBoardX.setText("" + ++xWin);
+                gameEnd(winningLabels);
+            });
+        } else if (result.charAt(0) == 'O') {
+            Platform.runLater(() -> {
+                gameLabel.setText("O won!");
+                ScoreBoardO.setText("" + ++oWin);
+                gameEnd(winningLabels);
+            });
         }
     }
 
@@ -267,7 +240,6 @@ public class Lobby {
 
     @FXML
     public void resetBoard(ActionEvent actionEvent) {
-        //notifyObservers(0,'C');
         gameLabel.setText("Tic-Tac-Toe");
         tiles.forEach(stackPane -> stackPane.setDisable(false));
         box.forEach(label -> label.setText(""));
