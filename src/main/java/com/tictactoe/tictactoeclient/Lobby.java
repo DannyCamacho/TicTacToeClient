@@ -134,10 +134,12 @@ public class Lobby {
     private char currentPlayer = 'O';
 
     public void initialize() {
+        Platform.runLater(() -> {
         box = new ArrayList<>(Arrays.asList(box1, box2, box3, box4, box5, box6, box7, box8, box9));
         tiles = new ArrayList<>(Arrays.asList(tile1, tile2, tile3, tile4, tile5, tile6, tile7, tile8, tile9));
         tiles.forEach(stackPane -> stackPane.setDisable(true));
         winningLine.setVisible(false);
+        });
     }
 
     @FXML
@@ -173,21 +175,25 @@ public class Lobby {
     }
 
     public void gameEnd(List<StackPane> winningLabels) {
-        tiles.forEach(stackPane -> stackPane.setDisable(true));
-        if(winningLabels != null) {
-            drawWinningLine(winningLabels);
-            winningLine.setVisible(true);
-        }
-        startButton.setVisible(true);
+        Platform.runLater(() -> {
+            tiles.forEach(stackPane -> stackPane.setDisable(true));
+            if(winningLabels != null) {
+                drawWinningLine(winningLabels);
+                winningLine.setVisible(true);
+            }
+            startButton.setVisible(true);
+        });
     }
 
     private void drawWinningLine(List<StackPane> winningLabels) {
-        winningLine.setStartX(winningLabels.get(0).getLayoutX() + 50);
-        winningLine.setStartY(winningLabels.get(0).getLayoutY() + 50);
-        winningLine.setEndX(winningLabels.get(2).getLayoutX() + 50);
-        winningLine.setEndY(winningLabels.get(2).getLayoutY() + 50);
-        winningLine.setLayoutX(winningLine.getLayoutX());
-        winningLine.setLayoutY(winningLine.getLayoutY());
+        Platform.runLater(() -> {
+            winningLine.setStartX(winningLabels.get(0).getLayoutX() + 50);
+            winningLine.setStartY(winningLabels.get(0).getLayoutY() + 50);
+            winningLine.setEndX(winningLabels.get(2).getLayoutX() + 50);
+            winningLine.setEndY(winningLabels.get(2).getLayoutY() + 50);
+            winningLine.setLayoutX(winningLine.getLayoutX());
+            winningLine.setLayoutY(winningLine.getLayoutY());
+        });
     }
 
     public void checkIfGameIsOver(String result){
@@ -199,20 +205,19 @@ public class Lobby {
                 ScoreBoardDraw.setText("" + ++draw);
                 updateGameHistory("Draw");
                 gameEnd(null);
-                return;
             });
         }
 
         List<StackPane> winningLabels = new ArrayList<>();
         switch (result.charAt(1)) {
-            case 0 -> { winningLabels.add(tile1); winningLabels.add(tile2); winningLabels.add(tile3); }
-            case 1 -> { winningLabels.add(tile4); winningLabels.add(tile5); winningLabels.add(tile6); }
-            case 2 -> { winningLabels.add(tile7); winningLabels.add(tile8); winningLabels.add(tile9); }
-            case 3 -> { winningLabels.add(tile1); winningLabels.add(tile5); winningLabels.add(tile9); }
-            case 4 -> { winningLabels.add(tile3); winningLabels.add(tile5); winningLabels.add(tile7); }
-            case 5 -> { winningLabels.add(tile1); winningLabels.add(tile4); winningLabels.add(tile7); }
-            case 6 -> { winningLabels.add(tile2); winningLabels.add(tile5); winningLabels.add(tile8); }
-            case 7 -> { winningLabels.add(tile3); winningLabels.add(tile6); winningLabels.add(tile9); }
+            case '0' -> { winningLabels.add(tile1); winningLabels.add(tile2); winningLabels.add(tile3); }
+            case '1' -> { winningLabels.add(tile4); winningLabels.add(tile5); winningLabels.add(tile6); }
+            case '2' -> { winningLabels.add(tile7); winningLabels.add(tile8); winningLabels.add(tile9); }
+            case '3' -> { winningLabels.add(tile1); winningLabels.add(tile4); winningLabels.add(tile7); }
+            case '4' -> { winningLabels.add(tile2); winningLabels.add(tile5); winningLabels.add(tile8); }
+            case '5' -> { winningLabels.add(tile3); winningLabels.add(tile6); winningLabels.add(tile9); }
+            case '6' -> { winningLabels.add(tile1); winningLabels.add(tile5); winningLabels.add(tile9); }
+            case '7' -> { winningLabels.add(tile3); winningLabels.add(tile5); winningLabels.add(tile7); }
         }
 
         if (result.charAt(0) == 'X') {
