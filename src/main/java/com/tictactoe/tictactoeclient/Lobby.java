@@ -162,7 +162,7 @@ public class Lobby {
             for (int i = 0; i < 9; i++) {
                 if (e.getSource().equals(tiles.get(i)) && box.get(i).getText().isEmpty()) {
                     try {
-                        output.writeObject(new PlayerMoveSend(gameName, currentPlayer, i, createBoard()));
+                        output.writeObject(new PlayerMoveSend(gameName, playerToken, i, createBoard()));
                         output.flush();
                     } catch (IOException ex) {
                         System.out.println("I/O Error: " + ex.getMessage());
@@ -289,6 +289,7 @@ public class Lobby {
         for (int i = 0; i < 9; ++i) {
             if (!box.get(i).getText().isEmpty()) {
                 boardState[i] = box.get(i).getText().charAt(0);
+                System.out.print(box.get(i).getText().charAt(0) + ",");
             } else boardState[i] = '\0';
         }
         return boardState;
