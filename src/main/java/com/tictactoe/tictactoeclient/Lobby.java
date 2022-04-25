@@ -198,17 +198,8 @@ public class Lobby {
 
     public void checkIfGameIsOver(String result){
         if (Objects.equals(result, "N")) return;
-
-        if(Objects.equals(result, "D")) {
-            Platform.runLater(() -> {
-                gameLabel.setText("Draw Game");
-                ScoreBoardDraw.setText("" + ++draw);
-                updateGameHistory("Draw");
-                gameEnd(null);
-            });
-        }
-
         List<StackPane> winningLabels = new ArrayList<>();
+
         switch (result.charAt(1)) {
             case '0' -> { winningLabels.add(tile1); winningLabels.add(tile2); winningLabels.add(tile3); }
             case '1' -> { winningLabels.add(tile4); winningLabels.add(tile5); winningLabels.add(tile6); }
@@ -218,19 +209,29 @@ public class Lobby {
             case '5' -> { winningLabels.add(tile3); winningLabels.add(tile6); winningLabels.add(tile9); }
             case '6' -> { winningLabels.add(tile1); winningLabels.add(tile5); winningLabels.add(tile9); }
             case '7' -> { winningLabels.add(tile3); winningLabels.add(tile5); winningLabels.add(tile7); }
+            default -> {}
         }
 
         if (result.charAt(0) == 'X') {
             Platform.runLater(() -> {
                 gameLabel.setText("X won!");
                 ScoreBoardX.setText("" + ++xWin);
+                updateGameHistory("X");
                 gameEnd(winningLabels);
             });
         } else if (result.charAt(0) == 'O') {
             Platform.runLater(() -> {
                 gameLabel.setText("O won!");
                 ScoreBoardO.setText("" + ++oWin);
+                updateGameHistory("O");
                 gameEnd(winningLabels);
+            });
+        } else if (result.charAt(0) == 'D') {
+            Platform.runLater(() -> {
+                gameLabel.setText("Draw Game");
+                ScoreBoardDraw.setText("" + ++draw);
+                updateGameHistory("Draw");
+                gameEnd(null);
             });
         }
     }
@@ -266,7 +267,6 @@ public class Lobby {
         for (int i = 0; i < 9; ++i) {
             if (!box.get(i).getText().isEmpty()) {
                 boardState[i] = box.get(i).getText().charAt(0);
-                System.out.print(box.get(i).getText().charAt(0) + ",");
             } else boardState[i] = '\0';
         }
         return boardState;
@@ -275,24 +275,6 @@ public class Lobby {
     @FXML
     public void updateGameHistory(String result) {
         BoardState boardState = new BoardState(createBoard());
-        gameHistory.getItems().add(boardState.endStateHistory(result));
+        Platform.runLater(() -> gameHistory.getItems().add(boardState.endStateHistory(result)));
     }
-//
-//    public void setComputerMove() {
-//        int move = computerPlayer.getMove(board.getBoard());
-//        notifyObservers(move, controller.getPlayer());
-//        setPlayerSymbol(box.get(move));
-//    }
-//
-//    public void register(BoardState board) {
-//        boards.add(board);
-//    }
-//
-//    public void unregister(BoardState board) {
-//        boards.remove(board);
-//    }
-//
-//    public void notifyObservers(int move, char arg) {
-//        for (BoardState board: boards) board.update(move, arg);
-//    }
 }

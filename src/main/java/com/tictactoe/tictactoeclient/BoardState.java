@@ -29,13 +29,13 @@ public class BoardState {
         };
 
         return (board[0] == 0 ? "  " : board[0]) + "  |  " +
-                (board[1] == 0 ? "  " : board[1]) + "  |  " +
-                (board[2] == 0 ? "  " : board[2]) + "\n" +
-                (board[3] == 0 ? "  " : board[3]) + "  |  " +
-                (board[4] == 0 ? "  " : board[4]) + "  |  " +
-                (board[5] == 0 ? "  " : board[5]) + s +
-                (board[6] == 0 ? "  " : board[6]) + "  |  " +
-                (board[7] == 0 ? "  " : board[7]) + "  |  " +
-                (board[8] == 0 ? "  " : board[8]);
+               (board[1] == 0 ? "  " : board[1]) + "  |  " +
+               (board[2] == 0 ? "  " : board[2]) + "\n" +
+               (board[3] == 0 ? "  " : board[3]) + "  |  " +
+               (board[4] == 0 ? "  " : board[4]) + "  |  " +
+               (board[5] == 0 ? "  " : board[5]) + s +
+               (board[6] == 0 ? "  " : board[6]) + "  |  " +
+               (board[7] == 0 ? "  " : board[7]) + "  |  " +
+               (board[8] == 0 ? "  " : board[8]);
     }
 }
