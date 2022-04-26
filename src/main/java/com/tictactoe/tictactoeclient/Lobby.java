@@ -30,8 +30,6 @@ public class Lobby {
     String hostname = "localhost";
     int port = 8000;
     private String userName;
-    private String gameName;
-    private char playerToken;
     private ObjectOutputStream output;
     public ListView<String> gameList;
     public Button connectButton, joinGameButton, refreshListButton, createGameButton;
@@ -129,7 +127,9 @@ public class Lobby {
     private Line winningLine;
     private List<StackPane> tiles;
     private List<Label> box;
+    private String gameName;
     private int xWin, oWin, draw;
+    private char playerToken;
     private char startingPlayer = 'O';
     private char currentPlayer = 'O';
 
@@ -148,8 +148,7 @@ public class Lobby {
         tiles.forEach(stackPane -> stackPane.setDisable(false));
         box.forEach(label -> label.setText(""));
         winningLine.setVisible(false);
-        String playerTurn = currentPlayer == playerToken ? "Your Turn" : "Waiting for Opponent";
-        gameLabel.setText(playerTurn);
+        gameLabel.setText(currentPlayer == playerToken ? "Your Turn" : "Waiting for Opponent");
     }
 
     @FXML
@@ -170,8 +169,7 @@ public class Lobby {
 
     public void setPlayerSymbol(Label label){
         label.setText(currentPlayer + "");
-        String playerTurn = currentPlayer == playerToken ? "Your Turn" : "Waiting for Opponent";
-        gameLabel.setText(playerTurn);
+        gameLabel.setText(currentPlayer == playerToken ? "Your Turn" : "Waiting for Opponent");
     }
 
     public void gameEnd(List<StackPane> winningLabels) {
