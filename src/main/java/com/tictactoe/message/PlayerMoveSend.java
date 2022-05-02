@@ -2,4 +2,4 @@ package com.tictactoe.message;
 
 import java.io.Serializable;
 
-public record PlayerMoveSend(String GameName, char playerToken, int move, char[] boardState) implements Serializable {}
+public record PlayerMoveSend(String gameName, char playerToken, int move, char[] boardState) implements Serializable {}

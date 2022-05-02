@@ -2,4 +2,4 @@ package com.tictactoe.message;
 
 import java.io.Serializable;
 
-public record ConnectToGame(String gameName, String userName, char playerToken) implements Serializable {}
+public record ConnectToGame(String gameName, String userName, boolean connection) implements Serializable {}
