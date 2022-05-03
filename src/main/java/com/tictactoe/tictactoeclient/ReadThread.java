@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.*;
 import java.net.*;
+import java.util.Objects;
 
 public class ReadThread extends Thread {
     private ObjectInputStream fromServer;
@@ -30,19 +31,22 @@ public class ReadThread extends Thread {
                 if (message instanceof ServerConnection || message instanceof GameListResult) {
                     lobby.update(message);
                 } else if (message instanceof UpdateGame) {
-                    board.update(message);
-                } else if (message instanceof ConnectToGame) {
-                    Platform.runLater(() -> {
-                        FXMLLoader root = new FXMLLoader(ClientApplication.class.getResource("board-view.fxml"));
-                        Stage stage = (Stage) lobby.connectButton.getParent().getScene().getWindow();
-                        Scene scene = null;
-                        try {
-                            scene = new Scene(root.load(), 600, 400);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        stage.setScene(scene);
-                    });
+                    if (Objects.equals(((UpdateGame) message).result(), "Connect to Game")) {
+                        Platform.runLater(() -> {
+                            FXMLLoader root = new FXMLLoader(ClientApplication.class.getResource("board-view.fxml"));
+                            Stage stage = (Stage) lobby.connectButton.getParent().getScene().getWindow();
+                            Scene scene = null;
+                            try {
+                                scene = new Scene(root.load(), 600, 400);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            stage.setScene(scene);
+                        });
+                        board.update(message);
+                    } else {
+                        board.update(message);
+                    }
                 }
             } catch (IOException | ClassNotFoundException ex) {
                 System.out.println("\nError reading from server: " + ex.getMessage()+ "\n");

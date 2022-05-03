@@ -80,7 +80,6 @@ public class Lobby {
         } catch (IOException ex) {
             System.out.println("I/O Error: " + ex.getMessage());
         }
-
     }
 
     public void update(Object message) throws IOException {
@@ -98,11 +97,9 @@ public class Lobby {
                 onRefreshButtonPressed();
             }
         } else if (message instanceof GameListResult) {
-            Platform.runLater(() -> {
-                gameList.getItems().clear();
-                for (String game : ((GameListResult)message).games())
-                    gameList.getItems().add(game);
-            });
+            Platform.runLater(() -> gameList.getItems().clear());
+            for (String game : ((GameListResult)message).games())
+                Platform.runLater(() -> gameList.getItems().add(game));
         }
     }
 }
