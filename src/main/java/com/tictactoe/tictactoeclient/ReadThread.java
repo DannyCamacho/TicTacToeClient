@@ -31,7 +31,7 @@ public class ReadThread extends Thread {
                 if (message instanceof ServerConnection || message instanceof GameListResult) {
                     lobby.update(message);
                 } else if (message instanceof UpdateGame) {
-                    if (Objects.equals(((UpdateGame) message).result(), "Connect to Game")) {
+                    if (Objects.equals(((UpdateGame)message).result(), "Connect to Game")) {
                         Platform.runLater(() -> {
                             FXMLLoader root = new FXMLLoader(ClientApplication.class.getResource("board-view.fxml"));
                             Stage stage = (Stage) lobby.connectButton.getParent().getScene().getWindow();
@@ -43,7 +43,6 @@ public class ReadThread extends Thread {
                             }
                             stage.setScene(scene);
                         });
-                        board.update(message);
                     } else {
                         board.update(message);
                     }
