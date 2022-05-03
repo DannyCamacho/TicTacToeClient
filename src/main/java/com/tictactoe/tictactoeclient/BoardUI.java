@@ -1,7 +1,6 @@
 package com.tictactoe.tictactoeclient;
 
-import com.tictactoe.message.PlayerMoveResult;
-import com.tictactoe.message.PlayerMoveSend;
+import com.tictactoe.message.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,10 +38,12 @@ public class BoardUI {
     private List<StackPane> tiles;
     private List<Label> box;
     private String gameName;
+    private String userName;
     private int xWin, oWin, draw;
     private char playerToken;
-    private char startingPlayer = 'O';
-    private char currentPlayer = 'O';
+    private char startingPlayer;
+    private char currentPlayer;
+    private BoardState board;
 
     public void initialize() {
         ReadThread.setBoard(this);
@@ -56,11 +57,23 @@ public class BoardUI {
     }
 
     public void update(Object message) {
-        if (message instanceof PlayerMoveResult) {
-            int i = ((PlayerMoveResult) message).move();
-            Platform.runLater(() -> setPlayerSymbol(box.get(i)));
-            currentPlayer = ((PlayerMoveResult) message).playerToken();
-            checkIfGameIsOver(((PlayerMoveResult) message).result());
+        if (message instanceof UpdateGame) {
+            if (Objects.equals(((UpdateGame) message).result(), "N")) {
+                board.setBoard(((UpdateGame) message).boardState());
+                currentPlayer = ((UpdateGame) message).currentToken();
+                updateBoardUI();
+            } else if (Objects.equals(((UpdateGame) message).result(), "New Game")) {
+                gameName = ((UpdateGame) message).gameName();
+                startingPlayer = ((UpdateGame) message).startingToken();
+                currentPlayer = ((UpdateGame) message).currentToken();
+                playerToken = ((UpdateGame) message).users().get(userName);
+                board.setBoard(((UpdateGame) message).boardState());
+            } else {
+                board.setBoard(((UpdateGame) message).boardState());
+                currentPlayer = ((UpdateGame) message).currentToken();
+                updateBoardUI();
+                checkIfGameIsOver(((UpdateGame)message).result());
+            }
         }
     }
 
@@ -79,7 +92,7 @@ public class BoardUI {
             for (int i = 0; i < 9; i++) {
                 if (e.getSource().equals(tiles.get(i)) && box.get(i).getText().isEmpty()) {
                     try {
-                        output.writeObject(new PlayerMoveSend(gameName, playerToken, i, createBoard()));
+                        output.writeObject(new PlayerMoveSend(gameName, playerToken, i, board.getBoard()));
                         output.flush();
                     } catch (IOException ex) {
                         System.out.println("I/O Error: " + ex.getMessage());
@@ -89,8 +102,16 @@ public class BoardUI {
         }
     }
 
-    public void setPlayerSymbol(Label label){
-        label.setText(currentPlayer + "");
+    public void updateBoardUI() {
+        for (int i = 0; i < 9; ++i) {
+            if (board.getBoard()[i] == 'X') {
+                box.get(i).setText("X");
+            } else if (board.getBoard()[i] == 'X') {
+                box.get(i).setText("O");
+            } else {
+                box.get(i).setText("");
+            }
+        }
         gameLabel.setText(currentPlayer == playerToken ? "Your Turn" : "Waiting for Opponent");
     }
 
@@ -182,20 +203,9 @@ public class BoardUI {
         gameHistory.getItems().clear();
     }
 
-    public char [] createBoard() {
-        char [] boardState = new char[9];
-        for (int i = 0; i < 9; ++i) {
-            if (!box.get(i).getText().isEmpty()) {
-                boardState[i] = box.get(i).getText().charAt(0);
-            } else boardState[i] = '\0';
-        }
-        return boardState;
-    }
-
     @FXML
     public void updateGameHistory(String result) {
-        BoardState boardState = new BoardState(createBoard());
-        Platform.runLater(() -> gameHistory.getItems().add(boardState.endStateHistory(result)));
+        Platform.runLater(() -> gameHistory.getItems().add(board.endStateHistory(result)));
     }
 
     public void returnToLobby(MouseEvent mouseEvent) {

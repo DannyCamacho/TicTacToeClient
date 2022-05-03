@@ -2,7 +2,7 @@ package com.tictactoe.tictactoeclient;
 
 public class BoardState {
     private char[] board;
-    private char player;
+    private char playerToken;
 
     public BoardState(char [] board) {
         this.board = board;
@@ -12,13 +12,8 @@ public class BoardState {
         return board;
     }
 
-    public void setBoard(char[] board, char player) {
-        this.player = player;
+    public void setBoard(char[] board) {
         System.arraycopy(board, 0, this.board, 0, 9);
-    }
-
-    private void clearBoard() {
-        for (int i = 0; i < 9; ++i) board[i] = 0;
     }
 
     public String endStateHistory(String result) {

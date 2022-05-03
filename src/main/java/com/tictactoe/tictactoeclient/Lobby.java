@@ -2,7 +2,6 @@ package com.tictactoe.tictactoeclient;
 
 import com.tictactoe.message.*;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -35,7 +34,7 @@ public class Lobby {
                 newGameTextField.setDisable(false);
                 gameList.setDisable(false);
                 userNameLabel.setText("User Name: " + userName);
-                onRefreshButtonPressed(null);
+                onRefreshButtonPressed();
             });
         }
     }
@@ -51,13 +50,13 @@ public class Lobby {
         }
     }
 
-    public void onConnectButtonPressed(ActionEvent actionEvent) {
+    public void onConnectButtonPressed() {
         if (userNameTextField.getText().equals("")) return;
         userName = userNameTextField.getText();
         execute();
     }
 
-    public void onRefreshButtonPressed(ActionEvent actionEvent) {
+    public void onRefreshButtonPressed() {
         try {
             output.writeObject(new GameListRequest(userName));
         } catch (IOException ex) {
@@ -65,7 +64,7 @@ public class Lobby {
         }
     }
 
-    public void onNewGameButtonPressed(ActionEvent actionEvent) {
+    public void onNewGameButtonPressed() {
         if (newGameTextField.getText().equals("")) return;
         try {
             output.writeObject(new ConnectToGame(newGameTextField.getText(), userName, true));
@@ -74,18 +73,30 @@ public class Lobby {
         }
     }
 
+    public void onJoinGamePressed() {
+        if (Objects.equals(gameList.getSelectionModel().getSelectedItem(), "")) return;
+        try {
+            output.writeObject(new ConnectToGame(gameList.getSelectionModel().getSelectedItem(), userName, true));
+        } catch (IOException ex) {
+            System.out.println("I/O Error: " + ex.getMessage());
+        }
+
+    }
+
     public void update(Object message) throws IOException {
         if (message instanceof ServerConnection) {
-            ReadThread.setOutputStream(output);
-            userNameTextField.setVisible(false);
-            connectButton.setVisible(false);
-            joinGameButton.setDisable(false);
-            refreshListButton.setDisable(false);
-            createGameButton.setDisable(false);
-            newGameTextField.setDisable(false);
-            gameList.setDisable(false);
-            Platform.runLater(() -> userNameLabel.setText("User Name: " + userName));
-            onRefreshButtonPressed(null);
+            if (Objects.equals(((ServerConnection)message).connectType(), "Connected")) {
+                ReadThread.setOutputStream(output);
+                userNameTextField.setVisible(false);
+                connectButton.setVisible(false);
+                joinGameButton.setDisable(false);
+                refreshListButton.setDisable(false);
+                createGameButton.setDisable(false);
+                newGameTextField.setDisable(false);
+                gameList.setDisable(false);
+                Platform.runLater(() -> userNameLabel.setText("User Name: " + userName));
+                onRefreshButtonPressed();
+            }
         } else if (message instanceof GameListResult) {
             Platform.runLater(() -> {
                 gameList.getItems().clear();

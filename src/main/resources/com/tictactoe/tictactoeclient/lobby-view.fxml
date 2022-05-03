@@ -17,7 +17,7 @@
         <Button fx:id="connectButton" layoutX="241.0" layoutY="14.0" mnemonicParsing="false" onAction="#onConnectButtonPressed" text="Connect" />
         <Label fx:id="userNameLabel" layoutX="14.0" layoutY="18.0" text="User Name:" />
         <TextField fx:id="userNameTextField" layoutX="82.0" layoutY="14.0" />
-        <Button fx:id="joinGameButton" disable="true" layoutX="11.0" layoutY="361.0" mnemonicParsing="false" text="Join Selected Game" />
+        <Button fx:id="joinGameButton" disable="true" layoutX="11.0" layoutY="361.0" mnemonicParsing="false" onAction="#onJoinGamePressed" text="Join Selected Game" />
         <Button fx:id="createGameButton" disable="true" layoutX="294.0" layoutY="361.0" mnemonicParsing="false" onAction="#onNewGameButtonPressed" text="Create New Game" />
        <TextField fx:id="newGameTextField" disable="true" layoutX="138.0" layoutY="361.0" />
     </AnchorPane>

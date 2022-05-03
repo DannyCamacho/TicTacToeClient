@@ -27,9 +27,9 @@ public class ReadThread extends Thread {
         while (true) {
             try {
                 Object message = fromServer.readObject();
-                if (message instanceof ServerConnection || message instanceof GameListRequest) {
+                if (message instanceof ServerConnection || message instanceof GameListResult) {
                     lobby.update(message);
-                } else if (message instanceof PlayerMoveResult) {
+                } else if (message instanceof UpdateGame) {
                     board.update(message);
                 } else if (message instanceof ConnectToGame) {
                     Platform.runLater(() -> {
