@@ -28,15 +28,14 @@ public class ReadThread extends Thread {
         while (true) {
             try {
                 Object message = fromServer.readObject();
-                if (message instanceof ServerConnection || message instanceof GameListResult) {
+                if (message instanceof ServerConnection) {
+                    lobby.update(message);
+                } else if (message instanceof GameListResult) {
+                    lobby.update(message);
+                } else if (message instanceof ConnectToGame) {
                     lobby.update(message);
                 } else if (message instanceof UpdateGame) {
-                    System.out.println(((UpdateGame)message).result());
-                    if (Objects.equals(((UpdateGame)message).result(), "Connect")) {
-                        lobby.update(message);
-                    } else {
-                        board.update(message);
-                    }
+                    board.update(message);
                 }
             } catch (IOException | ClassNotFoundException ex) {
                 System.out.println("\nError reading from server: " + ex.getMessage()+ "\n");

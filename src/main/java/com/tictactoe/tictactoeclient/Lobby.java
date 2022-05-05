@@ -3,7 +3,6 @@ package com.tictactoe.tictactoeclient;
 import com.tictactoe.message.*;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,7 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -111,7 +109,7 @@ public class Lobby {
                 System.out.println(game);
                 Platform.runLater(() -> gameList.getItems().add(game));
             }
-        } else if (message instanceof UpdateGame) {
+        } else if (message instanceof ConnectToGame) {
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("board-view.fxml")));
             stage = (Stage)connectButton.getParent().getScene().getWindow();
             scene = new Scene(root);
