@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,10 +17,7 @@ import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class BoardUI {
     private ObjectOutputStream output;
@@ -44,8 +42,13 @@ public class BoardUI {
     private char startingPlayer;
     private char currentPlayer;
     private BoardState board;
+    Parent root;
+    Scene scene;
+    Stage stage;
 
     public void initialize() {
+        userName = Lobby.getUserName();
+        board = new BoardState(new char[9]);
         ReadThread.setBoard(this);
         output = ReadThread.getOutputStream();
         Platform.runLater(() -> {
@@ -62,8 +65,8 @@ public class BoardUI {
                 board.setBoard(((UpdateGame) message).boardState());
                 currentPlayer = ((UpdateGame) message).currentToken();
                 updateBoardUI();
-            } else if (Objects.equals(((UpdateGame) message).result(), "New Game") ||
-                       Objects.equals(((UpdateGame) message).result(), "Connect To Game")) {
+            } else if (Objects.equals(((UpdateGame) message).result(), "New Game")) {
+                System.out.println(((UpdateGame) message).users());
                 gameName = ((UpdateGame) message).gameName();
                 startingPlayer = ((UpdateGame) message).startingToken();
                 currentPlayer = ((UpdateGame) message).currentToken();
@@ -104,16 +107,19 @@ public class BoardUI {
     }
 
     public void updateBoardUI() {
-        for (int i = 0; i < 9; ++i) {
-            if (board.getBoard()[i] == 'X') {
-                box.get(i).setText("X");
-            } else if (board.getBoard()[i] == 'X') {
-                box.get(i).setText("O");
-            } else {
-                box.get(i).setText("");
+        System.out.println(board.getBoard());
+        Platform.runLater(() -> {
+            for (int i = 0; i < 9; ++i) {
+                if (board.getBoard()[i] == 'X') {
+                    box.get(i).setText("X");
+                } else if (board.getBoard()[i] == 'O') {
+                    box.get(i).setText("O");
+                } else {
+                    box.get(i).setText("");
+                }
             }
-        }
-        gameLabel.setText(currentPlayer == playerToken ? "Your Turn" : "Waiting for Opponent");
+            gameLabel.setText(currentPlayer == playerToken ? "Your Turn" : "Waiting for Opponent");
+        });
     }
 
     public void gameEnd(List<StackPane> winningLabels) {
@@ -209,14 +215,13 @@ public class BoardUI {
         Platform.runLater(() -> gameHistory.getItems().add(board.endStateHistory(result)));
     }
 
-    public void returnToLobby(MouseEvent mouseEvent) {
-        try {
-            FXMLLoader root = new FXMLLoader(ClientApplication.class.getResource("lobby-view.fxml"));
-            Stage stage = (Stage) ((Node)mouseEvent.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root.load(), 600, 400);
-            Platform.runLater(() -> stage.setScene(scene));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void returnToLobby(MouseEvent mouseEvent) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("lobby-view.fxml")));
+        stage = (Stage)startButton.getParent().getScene().getWindow();
+        scene = new Scene(root);
+        Platform.runLater(() -> {
+            stage.setScene(scene);
+            stage.show();
+        });
     }
 }

@@ -5,11 +5,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.Objects;
 
 public class TitleController {
     @FXML
@@ -19,22 +21,22 @@ public class TitleController {
     private static boolean localGame;
     private Stage stage;
     private Scene scene;
-    private FXMLLoader root;
+    private Parent root;
 
     @FXML
     public void switchBoardScene(ActionEvent event) throws IOException {
-        root = new FXMLLoader(ClientApplication.class.getResource("board-view.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root.load(), 600,400);
-        stage.setScene(scene);
+//        root = new FXMLLoader(ClientApplication.class.getResource("board-view.fxml"));
+//        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+//        scene = new Scene(root.load(), 600,400);
+//        stage.setScene(scene);
     }
 
     @FXML
     public void switchBoardScene2(ActionEvent event) throws IOException {
-        root = new FXMLLoader(ClientApplication.class.getResource("board-view.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root.load(), 600,400);
-        stage.setScene(scene);
+//        root = new FXMLLoader(ClientApplication.class.getResource("board-view.fxml"));
+//        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+//        scene = new Scene(root.load(), 600,400);
+//        stage.setScene(scene);
     }
 
     @FXML
@@ -91,9 +93,10 @@ public class TitleController {
     }
 
     public void switchToLobby(ActionEvent event) throws IOException {
-        root = new FXMLLoader(ClientApplication.class.getResource("lobby-view.fxml"));
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("lobby-view.fxml")));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root.load(), 600,400);
+        scene = new Scene(root);
         stage.setScene(scene);
+        stage.show();
     }
 }
