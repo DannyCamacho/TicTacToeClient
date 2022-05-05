@@ -25,12 +25,10 @@ public class Lobby {
     public Button connectButton, joinGameButton, refreshListButton, createGameButton;
     public Label userNameLabel;
     public TextField userNameTextField, newGameTextField;
-    private Parent root;
-    private Scene scene;
-    private Stage stage;
 
     public void initialize() {
         if (!Objects.equals(userName, null)) {
+            ReadThread.setLobby(this);
             output = ReadThread.getOutputStream();
             Platform.runLater(() -> {
                 userNameTextField.setVisible(false);
@@ -105,14 +103,13 @@ public class Lobby {
             }
         } else if (message instanceof GameListResult) {
             Platform.runLater(() -> gameList.getItems().clear());
-            for (String game : ((GameListResult)message).games()) {
-                System.out.println(game);
+            for (String game : ((GameListResult) message).games()) {
                 Platform.runLater(() -> gameList.getItems().add(game));
             }
         } else if (message instanceof ConnectToGame) {
-            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("board-view.fxml")));
-            stage = (Stage)connectButton.getParent().getScene().getWindow();
-            scene = new Scene(root);
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("board-view.fxml")));
+            Stage stage = (Stage)connectButton.getParent().getScene().getWindow();
+            Scene scene = new Scene(root);
             Platform.runLater(() -> {
                 stage.setScene(scene);
                 stage.show();

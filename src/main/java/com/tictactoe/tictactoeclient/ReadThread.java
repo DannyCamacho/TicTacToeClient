@@ -1,13 +1,8 @@
 package com.tictactoe.tictactoeclient;
 
 import com.tictactoe.message.*;
-import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 import java.io.*;
 import java.net.*;
-import java.util.Objects;
 
 public class ReadThread extends Thread {
     private ObjectInputStream fromServer;
@@ -28,14 +23,10 @@ public class ReadThread extends Thread {
         while (true) {
             try {
                 Object message = fromServer.readObject();
-                if (message instanceof ServerConnection) {
-                    lobby.update(message);
-                } else if (message instanceof GameListResult) {
-                    lobby.update(message);
-                } else if (message instanceof ConnectToGame) {
-                    lobby.update(message);
-                } else if (message instanceof UpdateGame) {
+                if (message instanceof UpdateGame) {
                     board.update(message);
+                } else {
+                    lobby.update(message);
                 }
             } catch (IOException | ClassNotFoundException ex) {
                 System.out.println("\nError reading from server: " + ex.getMessage()+ "\n");

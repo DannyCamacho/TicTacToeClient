@@ -2,10 +2,8 @@ package com.tictactoe.tictactoeclient;
 
 import com.tictactoe.message.*;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -35,16 +33,10 @@ public class BoardUI {
     private Line winningLine;
     private List<StackPane> tiles;
     private List<Label> box;
-    private String gameName;
-    private String userName;
-    private int xWin, oWin, draw;
-    private char playerToken;
-    private char startingPlayer;
-    private char currentPlayer;
     private BoardState board;
-    Parent root;
-    Scene scene;
-    Stage stage;
+    private String gameName, userName;
+    private int xWin, oWin, draw;
+    private char playerToken, currentPlayer;
 
     public void initialize() {
         userName = Lobby.getUserName();
@@ -61,22 +53,16 @@ public class BoardUI {
 
     public void update(Object message) {
         if (message instanceof UpdateGame) {
-            if (Objects.equals(((UpdateGame) message).result(), "N")) {
-                board.setBoard(((UpdateGame) message).boardState());
-                currentPlayer = ((UpdateGame) message).currentToken();
-                updateBoardUI();
-            } else if (Objects.equals(((UpdateGame) message).result(), "New Game")) {
-                System.out.println(((UpdateGame) message).users());
+            board.setBoard(((UpdateGame)message).boardState());
+            currentPlayer = ((UpdateGame)message).currentToken();
+            if (Objects.equals(((UpdateGame) message).result(), "New Game")) {
                 gameName = ((UpdateGame) message).gameName();
-                startingPlayer = ((UpdateGame) message).startingToken();
-                currentPlayer = ((UpdateGame) message).currentToken();
                 playerToken = ((UpdateGame) message).users().get(userName);
-                board.setBoard(((UpdateGame) message).boardState());
-            } else {
-                board.setBoard(((UpdateGame) message).boardState());
-                currentPlayer = ((UpdateGame) message).currentToken();
                 updateBoardUI();
-                checkIfGameIsOver(((UpdateGame)message).result());
+                Platform.runLater(() -> gameLabel.setText("Tic-Tac-Toe"));
+            } else {
+                updateBoardUI();
+                checkIfGameIsOver(((UpdateGame) message).result());
             }
         }
     }
@@ -85,7 +71,6 @@ public class BoardUI {
     void startingGame() {
         startButton.setVisible(false);
         tiles.forEach(stackPane -> stackPane.setDisable(false));
-        box.forEach(label -> label.setText(""));
         winningLine.setVisible(false);
         gameLabel.setText(currentPlayer == playerToken ? "Your Turn" : "Waiting for Opponent");
     }
@@ -107,7 +92,6 @@ public class BoardUI {
     }
 
     public void updateBoardUI() {
-        System.out.println(board.getBoard());
         Platform.runLater(() -> {
             for (int i = 0; i < 9; ++i) {
                 if (board.getBoard()[i] == 'X') {
@@ -185,40 +169,16 @@ public class BoardUI {
     }
 
     @FXML
-    public void switchMenuScene(ActionEvent event) throws IOException {
-        FXMLLoader root = new FXMLLoader(ClientApplication.class.getResource("TitleScreen.fxml"));
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root.load(), 600,400);
-        stage.setScene(scene);
-    }
-
-    @FXML
-    public void resetBoard() {
-        gameLabel.setText("Tic-Tac-Toe");
-        tiles.forEach(stackPane -> stackPane.setDisable(false));
-        box.forEach(label -> label.setText(""));
-        winningLine.setVisible(false);
-        gameEnd(null);
-    }
-
-    @FXML
-    public void resetScore() {
-        ScoreBoardO.setText("0");
-        ScoreBoardX.setText("0");
-        ScoreBoardDraw.setText("0");
-        oWin = xWin = draw = 0;
-        gameHistory.getItems().clear();
-    }
-
-    @FXML
     public void updateGameHistory(String result) {
         Platform.runLater(() -> gameHistory.getItems().add(board.endStateHistory(result)));
     }
 
-    public void returnToLobby(MouseEvent mouseEvent) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("lobby-view.fxml")));
-        stage = (Stage)startButton.getParent().getScene().getWindow();
-        scene = new Scene(root);
+    public void returnToLobby() throws IOException {
+        output.writeObject(new ConnectToGame(gameName, userName, false));
+        output.flush();
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("lobby-view.fxml")));
+        Stage stage = (Stage)startButton.getParent().getScene().getWindow();
+        Scene scene = new Scene(root);
         Platform.runLater(() -> {
             stage.setScene(scene);
             stage.show();

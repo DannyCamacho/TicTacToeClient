@@ -27,9 +27,6 @@
             <Font name="Palatino Linotype" size="20.0" />
         </font>
     </Label>
-    <Button layoutX="14.0" layoutY="18.0" mnemonicParsing="false" onAction="#switchMenuScene" text="Main Menu" visible="false" />
-    <Button layoutX="333.0" layoutY="149.0" mnemonicParsing="false" onAction="#resetBoard" text="Reset Game" visible="false" />
-    <Button layoutX="332.0" layoutY="188.0" mnemonicParsing="false" onAction="#resetScore" text="Reset Scores" />
     <Button fx:id="startButton" layoutX="335.0" layoutY="111.0" mnemonicParsing="false" onAction="#startingGame" text="Start Game" />
     <Pane layoutX="25.0" layoutY="69.0" prefHeight="300.0" prefWidth="300.0">
         <Line fx:id="winningLine" fill="black" stroke="black" strokeWidth="4" />
@@ -108,5 +105,5 @@
         <Line endX="55.0" layoutX="99.0" layoutY="33.0" startX="-95.0" />
         <Line endX="55.0" layoutX="99.0" layoutY="73.0" startX="-95.0" />
     </Pane>
-   <Button fx:id="lobbyButton" layoutX="484.0" layoutY="18.0" mnemonicParsing="false" text="Return to Lobby" onMouseClicked="#returnToLobby" />
+   <Button layoutX="484.0" layoutY="18.0" mnemonicParsing="false" text="Return to Lobby" onMouseClicked="#returnToLobby" />
 </AnchorPane>

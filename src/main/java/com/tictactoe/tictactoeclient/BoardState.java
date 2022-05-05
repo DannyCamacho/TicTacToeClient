@@ -3,6 +3,7 @@ package com.tictactoe.tictactoeclient;
 public class BoardState {
     private char[] board;
     private char playerToken;
+    private char currentPlayer;
 
     public BoardState(char [] board) {
         this.board = board;
