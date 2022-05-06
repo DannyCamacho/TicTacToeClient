@@ -105,5 +105,5 @@
         <Line endX="55.0" layoutX="99.0" layoutY="33.0" startX="-95.0" />
         <Line endX="55.0" layoutX="99.0" layoutY="73.0" startX="-95.0" />
     </Pane>
-   <Button layoutX="484.0" layoutY="18.0" mnemonicParsing="false" text="Return to Lobby" onMouseClicked="#returnToLobby" />
+   <Button layoutX="484.0" layoutY="18.0" mnemonicParsing="false" onMouseClicked="#returnToLobby" text="Return to Lobby" />
 </AnchorPane>

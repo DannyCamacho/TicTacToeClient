@@ -51,7 +51,7 @@ public class BoardUI {
         });
     }
 
-    public void update(Object message) {
+    public void update(Object message) throws IOException {
         if (message instanceof UpdateGame) {
             board.setBoard(((UpdateGame)message).boardState());
             currentPlayer = ((UpdateGame)message).currentToken();
@@ -128,8 +128,11 @@ public class BoardUI {
         });
     }
 
-    public void checkIfGameIsOver(String result){
-        if (Objects.equals(result, "N")) return;
+    public void checkIfGameIsOver(String result) {
+        if (Objects.equals(result, "N")) {
+            return;
+        }
+
         List<StackPane> winningLabels = new ArrayList<>();
 
         switch (result.charAt(1)) {

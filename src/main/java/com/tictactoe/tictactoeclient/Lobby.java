@@ -20,14 +20,15 @@ public class Lobby {
     private String hostname = "localhost";
     private int port = 8000;
     private static String userName;
+    private static boolean connected = false;
     private ObjectOutputStream output;
     public ListView<String> gameList;
-    public Button connectButton, joinGameButton, refreshListButton, createGameButton;
+    public Button connectButton, joinGameButton, refreshListButton, createGameButton, mainMenuButton, vsAIButton;
     public Label userNameLabel;
     public TextField userNameTextField, newGameTextField;
 
     public void initialize() {
-        if (!Objects.equals(userName, null)) {
+        if (connected) {
             ReadThread.setLobby(this);
             output = ReadThread.getOutputStream();
             Platform.runLater(() -> {
@@ -37,6 +38,7 @@ public class Lobby {
                 refreshListButton.setDisable(false);
                 createGameButton.setDisable(false);
                 newGameTextField.setDisable(false);
+                vsAIButton.setDisable(false);
                 gameList.setDisable(false);
                 userNameLabel.setText("User Name: " + userName);
                 onRefreshButtonPressed();
@@ -87,9 +89,40 @@ public class Lobby {
         }
     }
 
+    public void onMainMenuButtonPressed() throws IOException {
+        if (connected) {
+            output.writeObject(new ServerConnection("Player", userName, false));
+            userName = "";
+            connected = false;
+        }
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("title-view.fxml")));
+        Stage stage = (Stage)connectButton.getParent().getScene().getWindow();
+        Scene scene = new Scene(root);
+        Platform.runLater(() -> {
+            stage.setScene(scene);
+            stage.show();
+        });
+    }
+
+    public void onVsAIButtonPressed() throws IOException {
+        try {
+            output.writeObject(new ConnectToGame(userName + " vs AI Player", userName, true));
+        } catch (IOException ex) {
+            System.out.println("I/O Error: " + ex.getMessage());
+        }
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("board-view.fxml")));
+        Stage stage = (Stage)connectButton.getParent().getScene().getWindow();
+        Scene scene = new Scene(root);
+        Platform.runLater(() -> {
+            stage.setScene(scene);
+            stage.show();
+        });
+    }
+
     public void update(Object message) throws IOException {
         if (message instanceof ServerConnection) {
             if (Objects.equals(((ServerConnection)message).connectType(), "Connected")) {
+                connected = true;
                 ReadThread.setOutputStream(output);
                 userNameTextField.setVisible(false);
                 connectButton.setVisible(false);
@@ -97,6 +130,7 @@ public class Lobby {
                 refreshListButton.setDisable(false);
                 createGameButton.setDisable(false);
                 newGameTextField.setDisable(false);
+                vsAIButton.setDisable(false);
                 gameList.setDisable(false);
                 Platform.runLater(() -> userNameLabel.setText("User Name: " + userName));
                 onRefreshButtonPressed();

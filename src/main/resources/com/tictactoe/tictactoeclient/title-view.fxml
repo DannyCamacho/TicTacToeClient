@@ -7,76 +7,28 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.tictactoe.tictactoeclient.TitleController">
-    <ImageView blendMode="LIGHTEN" fitHeight="603.0" fitWidth="600.0" layoutY="-54.0" opacity="0.6" pickOnBounds="true"
-               preserveRatio="true">
-        <Image url="@../../../imgs/topScrollBG.gif"/>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tictactoe.tictactoeclient.TitleController">
+    <ImageView blendMode="LIGHTEN" fitHeight="603.0" fitWidth="600.0" layoutY="-54.0" opacity="0.6" pickOnBounds="true" preserveRatio="true">
+        <Image url="@../../../imgs/topScrollBG.gif" />
     </ImageView>
-    <Label fx:id="titleScreenLabel" alignment="CENTER" contentDisplay="CENTER" layoutY="27.0" prefHeight="58.0"
-           prefWidth="600.0" text="Welcome to Tic-Tac-Toe" textAlignment="JUSTIFY" wrapText="true">
+    <Label fx:id="titleScreenLabel" alignment="CENTER" contentDisplay="CENTER" layoutY="27.0" prefHeight="58.0" prefWidth="600.0" text="Welcome to Tic-Tac-Toe" textAlignment="JUSTIFY" wrapText="true">
         <font>
-            <Font name="Palatino Linotype" size="40.0"/>
+            <Font name="Palatino Linotype" size="40.0" />
         </font>
     </Label>
-    <Button fx:id="localButton" layoutX="236.0" layoutY="155.0" mnemonicParsing="false" onAction="#switchBoardScene2"
-            prefHeight="44.0" prefWidth="130.0" style="-fx-background-color: darkgray;" text="Local Game"
-            visible="false">
+    <Button fx:id="localGameButton" layoutX="236.0" layoutY="155.0" mnemonicParsing="false" onAction="#localGameButtonClicked" prefHeight="44.0" prefWidth="130.0" style="-fx-background-color: darkgray;" text="Local Game">
         <font>
-            <Font name="Palatino LinotypePalatino Linotype" size="18.0"/>
+            <Font name="Palatino Linotype" size="18.0" />
         </font>
     </Button>
-    <Button fx:id="onlineButton" layoutX="236.0" layoutY="210.0" mnemonicParsing="false" onAction="#switchToLobby"
-            prefHeight="44.0" prefWidth="130.0" style="-fx-background-color: darkgray;" text="Online Game"
-            visible="false">
+    <Button fx:id="onlineGameButton" layoutX="236.0" layoutY="210.0" mnemonicParsing="false" onAction="#onlineGameButtonClicked" prefHeight="44.0" prefWidth="130.0" style="-fx-background-color: darkgray;" text="Online Game">
         <font>
-            <Font name="Palatino Linotype" size="18.0"/>
+            <Font name="Palatino Linotype" size="18.0" />
         </font>
     </Button>
-    <Button fx:id="onePlayerButton" layoutX="236.0" layoutY="155.0" mnemonicParsing="false" onAction="#onePlayerClicked"
-            prefHeight="44.0" prefWidth="130.0" style="-fx-background-color: darkgray;" text="One Player">
+    <Button fx:id="quitButton" layoutX="236.0" layoutY="265.0" mnemonicParsing="false" onAction="#quitButtonClicked" prefHeight="44.0" prefWidth="130.0" style="-fx-background-color: darkgray;" text="Quit">
         <font>
-            <Font name="Palatino Linotype" size="18.0"/>
-        </font>
-    </Button>
-    <Button fx:id="twoPlayerButton" layoutX="236.0" layoutY="210.0" mnemonicParsing="false" onAction="#twoPlayerClicked"
-            prefHeight="44.0" prefWidth="130.0" style="-fx-background-color: darkgray;" text="Two Players">
-        <font>
-            <Font name="Palatino Linotype" size="18.0"/>
-        </font>
-    </Button>
-    <Button fx:id="easyButton" disable="true" layoutX="236.0" layoutY="100.0" mnemonicParsing="false"
-            onAction="#switchBoardScene" prefHeight="44.0" prefWidth="130.0" style="-fx-background-color: darkgray;"
-            text="Easy" visible="false">
-        <font>
-            <Font name="Palatino Linotype" size="18.0"/>
-        </font>
-    </Button>
-    <Button fx:id="moderateButton" disable="true" layoutX="236.0" layoutY="155.0" mnemonicParsing="false"
-            onAction="#switchBoardScene" prefHeight="44.0" prefWidth="130.0" style="-fx-background-color: darkgray;"
-            text="Moderate" visible="false">
-        <font>
-            <Font name="Palatino Linotype" size="18.0"/>
-        </font>
-    </Button>
-    <Button fx:id="impossibleButton" layoutX="236.0" layoutY="210.0" mnemonicParsing="false"
-            onAction="#switchBoardScene" prefHeight="44.0" prefWidth="130.0" style="-fx-background-color: darkgray;"
-            text="Impossible" visible="false">
-        <font>
-            <Font name="Palatino Linotype" size="18.0"/>
-        </font>
-    </Button>
-    <Button fx:id="backButton" layoutX="236.0" layoutY="265.0" mnemonicParsing="false" onAction="#backButtonClicked"
-            prefHeight="44.0" prefWidth="130.0" style="-fx-background-color: darkgray;" text="Back" visible="false">
-        <font>
-            <Font name="Palatino Linotype" size="18.0"/>
-        </font>
-    </Button>
-    <Button fx:id="quitButton" layoutX="236.0" layoutY="265.0" mnemonicParsing="false" onAction="#quitButtonClicked"
-            prefHeight="44.0" prefWidth="130.0" style="-fx-background-color: darkgray;" text="Quit">
-        <font>
-            <Font name="Palatino Linotype" size="18.0"/>
+            <Font name="Palatino Linotype" size="18.0" />
         </font>
     </Button>
 </AnchorPane>

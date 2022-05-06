@@ -3,6 +3,7 @@ package com.tictactoe.tictactoeclient;
 import com.tictactoe.message.*;
 import java.io.*;
 import java.net.*;
+import java.util.Objects;
 
 public class ReadThread extends Thread {
     private ObjectInputStream fromServer;
@@ -25,6 +26,9 @@ public class ReadThread extends Thread {
                 Object message = fromServer.readObject();
                 if (message instanceof UpdateGame) {
                     board.update(message);
+                } else if (message instanceof ServerConnection
+                        && Objects.equals(((ServerConnection) message).connectType(), "Disconnect")) {
+                    break;
                 } else {
                     lobby.update(message);
                 }

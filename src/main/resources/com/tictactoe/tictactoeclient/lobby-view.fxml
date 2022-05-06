@@ -3,15 +3,11 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tictactoe.tictactoeclient.Lobby">
-    <AnchorPane fx:id="lobby" prefHeight="400.0" prefWidth="600.0" >
+    <AnchorPane prefHeight="400.0" prefWidth="600.0">
         <ListView fx:id="gameList" disable="true" layoutX="11.0" layoutY="50.0" prefHeight="300.0" prefWidth="580.0" />
         <Button fx:id="refreshListButton" disable="true" layoutX="509.0" layoutY="361.0" mnemonicParsing="false" onAction="#onRefreshButtonPressed" text="Refresh List" />
         <Button fx:id="connectButton" layoutX="241.0" layoutY="14.0" mnemonicParsing="false" onAction="#onConnectButtonPressed" text="Connect" />
@@ -20,5 +16,7 @@
         <Button fx:id="joinGameButton" disable="true" layoutX="11.0" layoutY="361.0" mnemonicParsing="false" onAction="#onJoinGamePressed" text="Join Selected Game" />
         <Button fx:id="createGameButton" disable="true" layoutX="294.0" layoutY="361.0" mnemonicParsing="false" onAction="#onNewGameButtonPressed" text="Create New Game" />
        <TextField fx:id="newGameTextField" disable="true" layoutX="138.0" layoutY="361.0" />
+      <Button fx:id="vsAIButton" disable="true" layoutX="417.0" layoutY="361.0" mnemonicParsing="false" onAction="#onVsAIButtonPressed" text="VS AI Player" />
+      <Button fx:id="mainMenuButton" layoutX="457.0" layoutY="14.0" mnemonicParsing="false" onAction="#onMainMenuButtonPressed" text="Return to Main Menu" />
     </AnchorPane>
 </AnchorPane>
