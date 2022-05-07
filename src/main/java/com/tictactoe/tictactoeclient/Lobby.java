@@ -74,7 +74,7 @@ public class Lobby {
     public void onNewGameButtonPressed() {
         if (newGameTextField.getText().equals("")) return;
         try {
-            output.writeObject(new ConnectToGame(newGameTextField.getText(), userName, true));
+            output.writeObject(new ConnectToGame(newGameTextField.getText(), userName, true, false));
         } catch (IOException ex) {
             System.out.println("I/O Error: " + ex.getMessage());
         }
@@ -83,7 +83,7 @@ public class Lobby {
     public void onJoinGamePressed() {
         if (Objects.equals(gameList.getSelectionModel().getSelectedItem(), "")) return;
         try {
-            output.writeObject(new ConnectToGame(gameList.getSelectionModel().getSelectedItem(), userName, true));
+            output.writeObject(new ConnectToGame(gameList.getSelectionModel().getSelectedItem(), userName, true, false));
         } catch (IOException ex) {
             System.out.println("I/O Error: " + ex.getMessage());
         }
@@ -106,7 +106,7 @@ public class Lobby {
 
     public void onVsAIButtonPressed() throws IOException {
         try {
-            output.writeObject(new ConnectToGame(userName + " vs AI Player", userName, true));
+            output.writeObject(new ConnectToGame(userName + " vs AI Player", userName, true, true));
         } catch (IOException ex) {
             System.out.println("I/O Error: " + ex.getMessage());
         }

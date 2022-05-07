@@ -177,7 +177,7 @@ public class BoardUI {
     }
 
     public void returnToLobby() throws IOException {
-        output.writeObject(new ConnectToGame(gameName, userName, false));
+        output.writeObject(new ConnectToGame(gameName, userName, false, false));
         output.flush();
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("lobby-view.fxml")));
         Stage stage = (Stage)startButton.getParent().getScene().getWindow();
