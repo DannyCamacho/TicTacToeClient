@@ -121,7 +121,7 @@ public class Lobby {
 
     public void update(Object message) throws IOException {
         if (message instanceof ServerConnection) {
-            if (Objects.equals(((ServerConnection)message).connectType(), "Connected")) {
+            if (((ServerConnection)message).connection()) {
                 connected = true;
                 ReadThread.setOutputStream(output);
                 userNameTextField.setVisible(false);

@@ -26,8 +26,7 @@ public class ReadThread extends Thread {
                 Object message = fromServer.readObject();
                 if (message instanceof UpdateGame) {
                     board.update(message);
-                } else if (message instanceof ServerConnection
-                        && Objects.equals(((ServerConnection) message).connectType(), "Disconnect")) {
+                } else if (message instanceof ServerConnection && !((ServerConnection) message).connection()) {
                     break;
                 } else {
                     lobby.update(message);

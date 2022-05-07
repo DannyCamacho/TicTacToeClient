@@ -55,7 +55,7 @@ public class BoardUI {
         if (message instanceof UpdateGame) {
             board.setBoard(((UpdateGame)message).boardState());
             currentPlayer = ((UpdateGame)message).currentToken();
-            if (Objects.equals(((UpdateGame) message).result(), "New Game")) {
+            if (Objects.equals(((UpdateGame) message).result(), "New")) {
                 gameName = ((UpdateGame) message).gameName();
                 playerToken = ((UpdateGame) message).users().get(userName);
                 updateBoardUI();
