@@ -53,7 +53,7 @@ public class BoardUI {
 
     public void update(Object message) throws IOException {
         if (message instanceof UpdateGame) {
-            if (Objects.equals(((UpdateGame) message).result(), "New")) {
+            if (Objects.equals(((UpdateGame) message).result(), "Initialize")) {
                 board.setBoard(((UpdateGame)message).boardState());
                 currentPlayer = ((UpdateGame)message).currentToken();
                 gameName = ((UpdateGame) message).gameName();
@@ -78,12 +78,10 @@ public class BoardUI {
     }
 
     @FXML
-    void startingGame() throws IOException {
+    void startingGame() {
         startButton.setVisible(false);
         tiles.forEach(stackPane -> stackPane.setDisable(false));
         winningLine.setVisible(false);
-        output.writeObject(new UpdateGame(gameName, null, '\0', null, "New"));
-        output.flush();
     }
 
     @FXML
