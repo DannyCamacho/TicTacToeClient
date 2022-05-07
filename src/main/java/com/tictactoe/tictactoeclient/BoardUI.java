@@ -78,11 +78,12 @@ public class BoardUI {
     }
 
     @FXML
-    void startingGame() {
+    void startingGame() throws IOException {
         startButton.setVisible(false);
         tiles.forEach(stackPane -> stackPane.setDisable(false));
         winningLine.setVisible(false);
-        updateBoardUI();
+        output.writeObject(new UpdateGame(gameName, null, '\0', null, "New"));
+        output.flush();
     }
 
     @FXML
