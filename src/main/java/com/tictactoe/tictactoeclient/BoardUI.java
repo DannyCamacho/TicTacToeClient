@@ -57,7 +57,7 @@ public class BoardUI {
             currentPlayer = ((UpdateGame)message).currentToken();
             if (Objects.equals(((UpdateGame) message).result(), "New")) {
                 gameName = ((UpdateGame) message).gameName();
-                playerToken = ((UpdateGame) message).users().get(userName);
+                playerToken = ((UpdateGame) message).userTokens().get(userName);
                 updateBoardUI();
                 Platform.runLater(() -> gameLabel.setText("Tic-Tac-Toe"));
             } else {
