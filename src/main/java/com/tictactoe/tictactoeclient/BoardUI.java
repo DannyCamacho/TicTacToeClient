@@ -53,9 +53,9 @@ public class BoardUI {
 
     public void update(Object message) throws IOException {
         if (message instanceof UpdateGame) {
-            board.setBoard(((UpdateGame)message).boardState());
-            currentPlayer = ((UpdateGame)message).currentToken();
             if (Objects.equals(((UpdateGame) message).result(), "New")) {
+                board.setBoard(((UpdateGame)message).boardState());
+                currentPlayer = ((UpdateGame)message).currentToken();
                 gameName = ((UpdateGame) message).gameName();
                 for (int i = 0; i < ((UpdateGame) message).userTokens().length; i = i + 2) {
                     if (Objects.equals(((UpdateGame) message).userTokens()[i], userName)) {
@@ -65,10 +65,14 @@ public class BoardUI {
                 updateBoardUI();
                 Platform.runLater(() -> gameLabel.setText("Tic-Tac-Toe"));
             } else if (Objects.equals(((UpdateGame) message).result(), "End")) {
+                board.setBoard(((UpdateGame)message).boardState());
+                currentPlayer = ((UpdateGame)message).currentToken();
                 startButton.setVisible(true);
             } else {
-            updateBoardUI();
-            checkIfGameIsOver(((UpdateGame) message).result());
+                board.setBoard(((UpdateGame)message).boardState());
+                currentPlayer = ((UpdateGame)message).currentToken();
+                updateBoardUI();
+                checkIfGameIsOver(((UpdateGame) message).result());
             }
         }
     }
