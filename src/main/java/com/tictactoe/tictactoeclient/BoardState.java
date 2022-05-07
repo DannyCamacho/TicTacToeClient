@@ -14,7 +14,7 @@ public class BoardState {
     }
 
     public void setBoard(char[] board) {
-        System.arraycopy(board, 0, this.board, 0, 9);
+        this.board = board;
     }
 
     public String endStateHistory(String result) {
