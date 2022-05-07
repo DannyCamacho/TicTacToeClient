@@ -57,16 +57,18 @@ public class BoardUI {
             currentPlayer = ((UpdateGame)message).currentToken();
             if (Objects.equals(((UpdateGame) message).result(), "New")) {
                 gameName = ((UpdateGame) message).gameName();
-                for (int i = 0; i < ((UpdateGame) message).userTokens().length; ++i) {
+                for (int i = 0; i < ((UpdateGame) message).userTokens().length; i = i + 2) {
                     if (Objects.equals(((UpdateGame) message).userTokens()[i], userName)) {
                         playerToken = ((UpdateGame) message).userTokens()[i + 1].charAt(0);
                     }
                 }
                 updateBoardUI();
                 Platform.runLater(() -> gameLabel.setText("Tic-Tac-Toe"));
+            } else if (Objects.equals(((UpdateGame) message).result(), "End")) {
+                startButton.setVisible(true);
             } else {
-                updateBoardUI();
-                checkIfGameIsOver(((UpdateGame) message).result());
+            updateBoardUI();
+            checkIfGameIsOver(((UpdateGame) message).result());
             }
         }
     }
@@ -76,7 +78,7 @@ public class BoardUI {
         startButton.setVisible(false);
         tiles.forEach(stackPane -> stackPane.setDisable(false));
         winningLine.setVisible(false);
-        gameLabel.setText(currentPlayer == playerToken ? "Your Turn" : "Waiting for Opponent");
+        updateBoardUI();
     }
 
     @FXML
@@ -110,15 +112,16 @@ public class BoardUI {
         });
     }
 
-    public void gameEnd(List<StackPane> winningLabels) {
+    public void gameEnd(List<StackPane> winningLabels) throws IOException {
         Platform.runLater(() -> {
             tiles.forEach(stackPane -> stackPane.setDisable(true));
             if(winningLabels != null) {
                 drawWinningLine(winningLabels);
                 winningLine.setVisible(true);
             }
-            startButton.setVisible(true);
         });
+        output.writeObject(new UpdateGame(gameName, null, '\0', null, "End"));
+        output.flush();
     }
 
     private void drawWinningLine(List<StackPane> winningLabels) {
@@ -156,21 +159,33 @@ public class BoardUI {
                 gameLabel.setText("X won!");
                 ScoreBoardX.setText("" + ++xWin);
                 updateGameHistory("X");
-                gameEnd(winningLabels);
+                try {
+                    gameEnd(winningLabels);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             });
         } else if (result.charAt(0) == 'O') {
             Platform.runLater(() -> {
                 gameLabel.setText("O won!");
                 ScoreBoardO.setText("" + ++oWin);
                 updateGameHistory("O");
-                gameEnd(winningLabels);
+                try {
+                    gameEnd(winningLabels);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             });
         } else if (result.charAt(0) == 'D') {
             Platform.runLater(() -> {
                 gameLabel.setText("Draw Game");
                 ScoreBoardDraw.setText("" + ++draw);
                 updateGameHistory("Draw");
-                gameEnd(null);
+                try {
+                    gameEnd(null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             });
         }
     }
