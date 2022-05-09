@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tictactoe.tictactoeclient.LocalBoardUI">
+    <Label fx:id="gameLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="25.0" layoutY="30.0" prefHeight="38.0" prefWidth="300.0" text="Tic-Tac-Toe">
+        <font>
+            <Font name="Palatino Linotype" size="20.0" />
+        </font>
+    </Label>
+    <Label alignment="CENTER" contentDisplay="CENTER" layoutX="416.0" layoutY="68.0" prefHeight="38.0" prefWidth="170.0" text="Scoreboard">
+        <font>
+            <Font name="Palatino Linotype" size="20.0" />
+        </font>
+    </Label>
+    <ListView fx:id="gameHistory" focusTraversable="false" layoutX="344.0" layoutY="249.0" prefHeight="120.0" prefWidth="240.0" />
+    <Label alignment="CENTER" contentDisplay="CENTER" layoutX="344.0" layoutY="225.0" prefHeight="1.0" prefWidth="240.0" text="Game History">
+        <font>
+            <Font name="Palatino Linotype" size="20.0" />
+        </font>
+    </Label>
+    <Button fx:id="startButton" layoutX="335.0" layoutY="111.0" mnemonicParsing="false" onAction="#startingGame" text="Start Game" />
+    <Pane layoutX="25.0" layoutY="69.0" prefHeight="300.0" prefWidth="300.0">
+        <Line fx:id="winningLine" fill="black" stroke="black" strokeWidth="4" />
+        <StackPane fx:id="tile3" layoutX="200.0" onMouseClicked="#playerAction" prefHeight="100.0" prefWidth="100.0" style="-fx-border-color: black;">
+            <Label fx:id="box3" alignment="CENTER">
+                <font>
+                    <Font name="Palatino Linotype" size="60" />
+                </font>
+            </Label>
+        </StackPane>
+        <StackPane fx:id="tile4" layoutY="100.0" onMouseClicked="#playerAction" prefHeight="100.0" prefWidth="100.0" style="-fx-border-color: black;">
+            <Label fx:id="box4" alignment="CENTER">
+                <font>
+                    <Font name="Palatino Linotype" size="60" />
+                </font>
+            </Label>
+        </StackPane>
+        <StackPane fx:id="tile5" layoutX="100.0" layoutY="100.0" onMouseClicked="#playerAction" prefHeight="100.0" prefWidth="100.0" style="-fx-border-color: black;">
+            <Label fx:id="box5" alignment="CENTER">
+                <font>
+                    <Font name="Palatino Linotype" size="60" />
+                </font>
+            </Label>
+        </StackPane>
+        <StackPane fx:id="tile6" layoutX="200.0" layoutY="100.0" onMouseClicked="#playerAction" prefHeight="100.0" prefWidth="100.0" style="-fx-border-color: black;">
+            <Label fx:id="box6" alignment="CENTER">
+                <font>
+                    <Font name="Palatino Linotype" size="60" />
+                </font>
+            </Label>
+        </StackPane>
+        <StackPane fx:id="tile7" layoutY="200.0" onMouseClicked="#playerAction" prefHeight="100.0" prefWidth="100.0" style="-fx-border-color: black;">
+            <Label fx:id="box7" alignment="CENTER">
+                <font>
+                    <Font name="Palatino Linotype" size="60" />
+                </font>
+            </Label>
+        </StackPane>
+        <StackPane fx:id="tile8" layoutX="100.0" layoutY="200.0" onMouseClicked="#playerAction" prefHeight="100.0" prefWidth="100.0" style="-fx-border-color: black;">
+            <Label fx:id="box8" alignment="CENTER">
+                <font>
+                    <Font name="Palatino Linotype" size="60" />
+                </font>
+            </Label>
+        </StackPane>
+        <StackPane fx:id="tile9" layoutX="200.0" layoutY="200.0" onMouseClicked="#playerAction" prefHeight="100.0" prefWidth="100.0" style="-fx-border-color: black;">
+            <Label fx:id="box9" alignment="CENTER">
+                <font>
+                    <Font name="Palatino Linotype" size="60" />
+                </font>
+            </Label>
+        </StackPane>
+        <StackPane fx:id="tile2" layoutX="100.0" onMouseClicked="#playerAction" prefHeight="100.0" prefWidth="100.0" style="-fx-border-color: black;">
+            <Label fx:id="box2" alignment="CENTER">
+                <font>
+                    <Font name="Palatino Linotype" size="60" />
+                </font>
+            </Label>
+        </StackPane>
+        <StackPane fx:id="tile1" onMouseClicked="#playerAction" prefHeight="100.0" prefWidth="100.0" style="-fx-border-color: black;">
+            <Label fx:id="box1" alignment="CENTER">
+                <font>
+                    <Font name="Palatino Linotype" size="60" />
+                </font>
+            </Label>
+        </StackPane>
+    </Pane>
+    <Pane layoutX="423.0" layoutY="111.0" prefHeight="100.0" prefWidth="161.0">
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="114.0" layoutX="-6.0" layoutY="-7.0" stroke="BLACK" strokeType="INSIDE" width="170.0" />
+        <Label layoutX="11.0" layoutY="2.0" prefHeight="31.0" prefWidth="116.0" text="X Player Game Wins" />
+        <Label layoutX="11.0" layoutY="35.0" prefHeight="31.0" prefWidth="116.0" text="O Player Game Wins" />
+        <Label layoutX="11.0" layoutY="71.0" prefHeight="31.0" prefWidth="116.0" text="Draw Games" />
+        <Label fx:id="ScoreBoardDraw" alignment="CENTER" layoutX="122.0" layoutY="71.0" prefHeight="31.0" prefWidth="34.0" text="0" />
+        <Label fx:id="ScoreBoardO" alignment="CENTER" layoutX="122.0" layoutY="37.0" prefHeight="31.0" prefWidth="34.0" text="0" />
+        <Label fx:id="ScoreBoardX" alignment="CENTER" layoutX="122.0" layoutY="2.0" prefHeight="31.0" prefWidth="34.0" text="0" />
+        <Line endX="55.0" layoutX="99.0" layoutY="33.0" startX="-95.0" />
+        <Line endX="55.0" layoutX="99.0" layoutY="73.0" startX="-95.0" />
+    </Pane>
+    <Button layoutX="484.0" layoutY="18.0" mnemonicParsing="false" onMouseClicked="#returnToLobby" text="Return to Lobby" />
+</AnchorPane>

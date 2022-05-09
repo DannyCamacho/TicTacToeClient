@@ -36,7 +36,6 @@ public class BoardUI {
     private BoardState board;
     private String gameName, userName;
     private int xWin, oWin, draw;
-    private char playerToken, currentPlayer;
 
     public void initialize() {
         userName = Lobby.getUserName();
@@ -55,22 +54,22 @@ public class BoardUI {
         if (message instanceof UpdateGame) {
             if (Objects.equals(((UpdateGame) message).result(), "Initialize")) {
                 board.setBoard(((UpdateGame)message).boardState());
-                currentPlayer = ((UpdateGame)message).currentToken();
+                board.setCurrentToken(((UpdateGame)message).currentToken());
                 gameName = ((UpdateGame) message).gameName();
                 for (int i = 0; i < ((UpdateGame) message).userTokens().length; i = i + 2) {
                     if (Objects.equals(((UpdateGame) message).userTokens()[i], userName)) {
-                        playerToken = ((UpdateGame) message).userTokens()[i + 1].charAt(0);
+                        board.setPlayerToken(((UpdateGame) message).userTokens()[i + 1].charAt(0));
                     }
                 }
                 updateBoardUI();
                 Platform.runLater(() -> gameLabel.setText("Tic-Tac-Toe"));
             } else if (Objects.equals(((UpdateGame) message).result(), "End")) {
                 board.setBoard(((UpdateGame)message).boardState());
-                currentPlayer = ((UpdateGame)message).currentToken();
+                board.setCurrentToken(((UpdateGame)message).currentToken());
                 startButton.setVisible(true);
             } else {
                 board.setBoard(((UpdateGame)message).boardState());
-                currentPlayer = ((UpdateGame)message).currentToken();
+                board.setCurrentToken(((UpdateGame)message).currentToken());
                 updateBoardUI();
                 checkIfGameIsOver(((UpdateGame) message).result());
             }
@@ -82,15 +81,16 @@ public class BoardUI {
         startButton.setVisible(false);
         tiles.forEach(stackPane -> stackPane.setDisable(false));
         winningLine.setVisible(false);
+        updateBoardUI();
     }
 
     @FXML
     public void playerAction(MouseEvent e) {
-        if (currentPlayer == playerToken) {
+        if (board.isPlayerTurn()) {
             for (int i = 0; i < 9; i++) {
                 if (e.getSource().equals(tiles.get(i)) && box.get(i).getText().isEmpty()) {
                     try {
-                        output.writeObject(new PlayerMoveSend(gameName, playerToken, i, board.getBoard()));
+                        output.writeObject(new PlayerMoveSend(gameName, board.getPlayerToken(), i, board.getBoard()));
                         output.flush();
                     } catch (IOException ex) {
                         System.out.println("I/O Error: " + ex.getMessage());
@@ -111,7 +111,7 @@ public class BoardUI {
                     box.get(i).setText("");
                 }
             }
-            gameLabel.setText(currentPlayer == playerToken ? "Your Turn" : "Waiting for Opponent");
+            gameLabel.setText(board.isPlayerTurn() ? "Your Turn" : "Waiting for Opponent");
         });
     }
 
