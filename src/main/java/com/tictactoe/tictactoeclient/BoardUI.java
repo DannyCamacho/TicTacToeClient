@@ -67,6 +67,9 @@ public class BoardUI {
                 updateBoardUI();
                 Platform.runLater(() -> gameLabel.setText("Tic-Tac-Toe"));
             } else if (Objects.equals(((UpdateGame) message).result(), "End")) {
+                board.setBoard(((UpdateGame)message).boardState());
+                System.out.println(((UpdateGame)message).boardState());
+                board.setCurrentToken(((UpdateGame)message).currentToken());
                 startButton.setVisible(true);
             } else {
                 updateBoardUI();
