@@ -3,6 +3,7 @@ package com.tictactoe.tictactoeclient;
 import com.tictactoe.message.*;
 import java.io.*;
 import java.net.*;
+import java.util.Objects;
 
 public class ReadThread extends Thread {
     private ObjectInputStream fromServer;
@@ -25,6 +26,12 @@ public class ReadThread extends Thread {
                 Object message = fromServer.readObject();
                 if (message instanceof UpdateGame) {
                     board.update(message);
+                } else if (message instanceof ChatMessage) {
+                    if (Objects.equals(((ChatMessage) message).messageType(), "Lobby")) {
+                        lobby.update(message);
+                    } else {
+                        board.update(message);
+                    }
                 } else if (message instanceof ServerConnection && !((ServerConnection) message).connection()) {
                     break;
                 } else {

@@ -6,9 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
@@ -18,6 +16,8 @@ import java.io.ObjectOutputStream;
 import java.util.*;
 
 public class BoardUI {
+    public TextArea ta;
+    public TextField chatTextField;
     private ObjectOutputStream output;
     @FXML
     private ListView<String> gameHistory;
@@ -75,6 +75,8 @@ public class BoardUI {
                 updateBoardUI();
                 checkIfGameIsOver(((UpdateGame) message).result());
             }
+        } else if (message instanceof ChatMessage) {
+            Platform.runLater(() -> ta.appendText(((ChatMessage) message).message()));
         }
     }
 
@@ -210,5 +212,12 @@ public class BoardUI {
             stage.setScene(scene);
             stage.show();
         });
+    }
+
+    public void onSendButtonClicked() throws IOException {
+        if (Objects.equals(chatTextField.getText(), "")) return;
+        String message = "\n[" + userName + "]:" + chatTextField.getText();
+        output.writeObject(new ChatMessage("Board", gameName, userName, message));
+        output.flush();
     }
 }

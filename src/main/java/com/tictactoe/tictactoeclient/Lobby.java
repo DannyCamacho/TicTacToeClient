@@ -5,10 +5,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -23,9 +20,10 @@ public class Lobby {
     private static boolean connected = false;
     private ObjectOutputStream output;
     public ListView<String> gameList;
-    public Button connectButton, joinGameButton, refreshListButton, createGameButton, mainMenuButton, vsAIButton;
+    public Button connectButton, joinGameButton, refreshListButton, createGameButton, mainMenuButton, vsAIButton, sendButton;
     public Label userNameLabel;
-    public TextField userNameTextField, newGameTextField;
+    public TextField userNameTextField, newGameTextField, chatTextField;
+    public TextArea ta;
 
     public void initialize() {
         if (connected) {
@@ -40,7 +38,11 @@ public class Lobby {
                 newGameTextField.setDisable(false);
                 vsAIButton.setDisable(false);
                 gameList.setDisable(false);
+                sendButton.setDisable(false);
+                chatTextField.setDisable(false);
+                ta.setDisable(false);
                 userNameLabel.setText("User Name: " + userName);
+                ta.appendText("Welcome to the Tic-Tac-Toe Lobby!\n");
                 onRefreshButtonPressed();
             });
         }
@@ -104,19 +106,12 @@ public class Lobby {
         });
     }
 
-    public void onVsAIButtonPressed() throws IOException {
+    public void onVsAIButtonPressed() {
         try {
             output.writeObject(new ConnectToGame(userName + " vs AI Player", userName, true, true));
         } catch (IOException ex) {
             System.out.println("I/O Error: " + ex.getMessage());
         }
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("board-view.fxml")));
-        Stage stage = (Stage)connectButton.getParent().getScene().getWindow();
-        Scene scene = new Scene(root);
-        Platform.runLater(() -> {
-            stage.setScene(scene);
-            stage.show();
-        });
     }
 
     public void update(Object message) throws IOException {
@@ -132,7 +127,13 @@ public class Lobby {
                 newGameTextField.setDisable(false);
                 vsAIButton.setDisable(false);
                 gameList.setDisable(false);
-                Platform.runLater(() -> userNameLabel.setText("User Name: " + userName));
+                sendButton.setDisable(false);
+                chatTextField.setDisable(false);
+                ta.setDisable(false);
+                Platform.runLater(() -> {
+                    userNameLabel.setText("User Name: " + userName);
+                    ta.appendText("Welcome to the Tic-Tac-Toe Lobby!\n");
+                });
                 onRefreshButtonPressed();
             }
         } else if (message instanceof GameListResult) {
@@ -148,6 +149,8 @@ public class Lobby {
                 stage.setScene(scene);
                 stage.show();
             });
+        } else if (message instanceof ChatMessage) {
+            Platform.runLater(() -> ta.appendText(((ChatMessage) message).message()));
         }
     }
 
