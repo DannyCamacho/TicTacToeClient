@@ -55,23 +55,19 @@ public class BoardUI {
     public void update(Object message) throws IOException {
         if (message instanceof UpdateGame) {
             board.setBoard(((UpdateGame)message).boardState());
-            board.setCurrentToken(((UpdateGame)message).currentToken());
             if (Objects.equals(((UpdateGame) message).result(), "Initialize") && !isInit) {
                 isInit = true;
                 gameName = ((UpdateGame) message).gameName();
-                for (int i = 0; i < ((UpdateGame) message).userTokens().length; i = i + 2) {
-                    if (Objects.equals(((UpdateGame) message).userTokens()[i], userName)) {
-                        board.setPlayerToken(((UpdateGame) message).userTokens()[i + 1].charAt(0));
-                    }
-                }
+                board.setPlayerToken(((UpdateGame) message).currentToken());
                 updateBoardUI();
                 Platform.runLater(() -> gameLabel.setText("Tic-Tac-Toe"));
             } else if (Objects.equals(((UpdateGame) message).result(), "End")) {
                 board.setBoard(((UpdateGame)message).boardState());
-                System.out.println(((UpdateGame)message).boardState());
                 board.setCurrentToken(((UpdateGame)message).currentToken());
                 startButton.setVisible(true);
             } else {
+                board.setBoard(((UpdateGame)message).boardState());
+                board.setCurrentToken(((UpdateGame)message).currentToken());
                 updateBoardUI();
                 checkIfGameIsOver(((UpdateGame) message).result());
             }
@@ -81,11 +77,12 @@ public class BoardUI {
     }
 
     @FXML
-    void startingGame() {
+    void startingGame() throws IOException {
         startButton.setVisible(false);
         tiles.forEach(stackPane -> stackPane.setDisable(false));
         winningLine.setVisible(false);
-        updateBoardUI();
+        output.writeObject(new UpdateGame(gameName, null, '\0', null, "New"));
+        output.flush();
     }
 
     @FXML
