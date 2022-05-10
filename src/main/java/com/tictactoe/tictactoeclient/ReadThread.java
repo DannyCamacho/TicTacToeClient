@@ -3,7 +3,6 @@ package com.tictactoe.tictactoeclient;
 import com.tictactoe.message.*;
 import java.io.*;
 import java.net.*;
-import java.util.Objects;
 
 public class ReadThread extends Thread {
     private ObjectInputStream fromServer;

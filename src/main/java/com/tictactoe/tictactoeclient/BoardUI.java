@@ -38,10 +38,10 @@ public class BoardUI {
     private int xWin, oWin, draw;
 
     public void initialize() {
-        userName = Lobby.getUserName();
-        board = new BoardState(new char[9]);
         ReadThread.setBoard(this);
         output = ReadThread.getOutputStream();
+        userName = Lobby.getUserName();
+        board = new BoardState(new char[9]);
         Platform.runLater(() -> {
             box = new ArrayList<>(Arrays.asList(box1, box2, box3, box4, box5, box6, box7, box8, box9));
             tiles = new ArrayList<>(Arrays.asList(tile1, tile2, tile3, tile4, tile5, tile6, tile7, tile8, tile9));
@@ -52,9 +52,9 @@ public class BoardUI {
 
     public void update(Object message) throws IOException {
         if (message instanceof UpdateGame) {
+            board.setBoard(((UpdateGame)message).boardState());
+            board.setCurrentToken(((UpdateGame)message).currentToken());
             if (Objects.equals(((UpdateGame) message).result(), "Initialize")) {
-                board.setBoard(((UpdateGame)message).boardState());
-                board.setCurrentToken(((UpdateGame)message).currentToken());
                 gameName = ((UpdateGame) message).gameName();
                 for (int i = 0; i < ((UpdateGame) message).userTokens().length; i = i + 2) {
                     if (Objects.equals(((UpdateGame) message).userTokens()[i], userName)) {
@@ -64,12 +64,8 @@ public class BoardUI {
                 updateBoardUI();
                 Platform.runLater(() -> gameLabel.setText("Tic-Tac-Toe"));
             } else if (Objects.equals(((UpdateGame) message).result(), "End")) {
-                board.setBoard(((UpdateGame)message).boardState());
-                board.setCurrentToken(((UpdateGame)message).currentToken());
                 startButton.setVisible(true);
             } else {
-                board.setBoard(((UpdateGame)message).boardState());
-                board.setCurrentToken(((UpdateGame)message).currentToken());
                 updateBoardUI();
                 checkIfGameIsOver(((UpdateGame) message).result());
             }
