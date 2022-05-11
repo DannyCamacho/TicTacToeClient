@@ -7,7 +7,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
@@ -36,12 +35,15 @@ public class BoardUI {
     private List<Label> box;
     private BoardState board;
     private String gameName, userName;
+    private int xWin, oWin, draw;
+    private boolean isInit;
 
     public void initialize() {
         ReadThread.setBoard(this);
         output = ReadThread.getOutputStream();
         userName = Lobby.getUserName();
-        board = new BoardState();
+        board = new BoardState(new char[9]);
+        isInit = false;
         Platform.runLater(() -> {
             box = new ArrayList<>(Arrays.asList(box1, box2, box3, box4, box5, box6, box7, box8, box9));
             tiles = new ArrayList<>(Arrays.asList(tile1, tile2, tile3, tile4, tile5, tile6, tile7, tile8, tile9));
@@ -53,44 +55,37 @@ public class BoardUI {
     public void update(Object message) throws IOException {
         if (message instanceof UpdateGame) {
             board.setBoard(((UpdateGame)message).boardState());
-            if (Objects.equals(((UpdateGame) message).result(), "Initialize")) {
+            board.setCurrentToken(((UpdateGame)message).currentToken());
+            if (Objects.equals(((UpdateGame) message).result(), "Initialize") && !isInit) {
+                isInit = true;
                 gameName = ((UpdateGame) message).gameName();
-                board.setPlayerToken(((UpdateGame) message).currentToken());
-                if (board.getPlayerToken() == 'S') startButton.setVisible(false);
+                for (int i = 0; i < ((UpdateGame) message).userTokens().length; i = i + 2) {
+                    if (Objects.equals(((UpdateGame) message).userTokens()[i], userName)) {
+                        board.setPlayerToken(((UpdateGame) message).userTokens()[i + 1].charAt(0));
+                    }
+                }
                 updateBoardUI();
                 Platform.runLater(() -> gameLabel.setText("Tic-Tac-Toe"));
             } else if (Objects.equals(((UpdateGame) message).result(), "End")) {
                 board.setBoard(((UpdateGame)message).boardState());
+                System.out.println(((UpdateGame)message).boardState());
                 board.setCurrentToken(((UpdateGame)message).currentToken());
-                if (board.getPlayerToken() != 'S') startButton.setVisible(true);
+                startButton.setVisible(true);
             } else {
-                board.setBoard(((UpdateGame)message).boardState());
-                board.setCurrentToken(((UpdateGame)message).currentToken());
                 updateBoardUI();
                 checkIfGameIsOver(((UpdateGame) message).result());
             }
         } else if (message instanceof ChatMessage) {
             Platform.runLater(() -> ta.appendText(((ChatMessage) message).message()));
-        } else if (message instanceof UpdateGameHistory) {
-            Platform.runLater(() -> {
-                ScoreBoardX.setText(((UpdateGameHistory) message).xodWins()[0]);
-                ScoreBoardO.setText(((UpdateGameHistory) message).xodWins()[1]);
-                ScoreBoardDraw.setText(((UpdateGameHistory) message).xodWins()[2]);
-                gameHistory.getItems().clear();
-            });
-            for (String history : ((UpdateGameHistory) message).gameHistory()) {
-                Platform.runLater(() -> gameHistory.getItems().add(history));
-            }
         }
     }
 
     @FXML
-    void startingGame() throws IOException {
+    void startingGame() {
         startButton.setVisible(false);
         tiles.forEach(stackPane -> stackPane.setDisable(false));
         winningLine.setVisible(false);
-        output.writeObject(new UpdateGame(gameName, null, '\0', null, "New"));
-        output.flush();
+        updateBoardUI();
     }
 
     @FXML
@@ -121,7 +116,6 @@ public class BoardUI {
                 }
             }
             if (!startButton.isVisible()) gameLabel.setText(board.isPlayerTurn() ? "Your Turn" : "Waiting for Opponent");
-            if (board.getPlayerToken() == 'S') gameLabel.setText(board.getCurrentToken() == 'X' ? "Player X Turn" : "Player O Turn");
         });
     }
 
@@ -154,6 +148,7 @@ public class BoardUI {
         }
 
         List<StackPane> winningLabels = new ArrayList<>();
+
         switch (result.charAt(1)) {
             case '0' -> { winningLabels.add(tile1); winningLabels.add(tile2); winningLabels.add(tile3); }
             case '1' -> { winningLabels.add(tile4); winningLabels.add(tile5); winningLabels.add(tile6); }
@@ -163,38 +158,48 @@ public class BoardUI {
             case '5' -> { winningLabels.add(tile3); winningLabels.add(tile6); winningLabels.add(tile9); }
             case '6' -> { winningLabels.add(tile1); winningLabels.add(tile5); winningLabels.add(tile9); }
             case '7' -> { winningLabels.add(tile3); winningLabels.add(tile5); winningLabels.add(tile7); }
-            default -> winningLabels = null;
+            default -> {}
         }
 
-        String labelString = switch (result.charAt(0)) {
-            case 'X' -> "X won!";
-            case 'O' -> "O won!";
-            default -> "Draw Game!";
-        };
-
-        List<StackPane> finalWinningLabels = winningLabels;
-        Platform.runLater(() -> {
-                gameLabel.setText(labelString);
+        if (result.charAt(0) == 'X') {
+            Platform.runLater(() -> {
+                gameLabel.setText("X won!");
+                ScoreBoardX.setText("" + ++xWin);
+                updateGameHistory("X");
                 try {
-                    gameEnd(finalWinningLabels);
+                    gameEnd(winningLabels);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-        });
-    }
-
-    public void onSendButtonClicked() throws IOException {
-        if (Objects.equals(chatTextField.getText(), "")) return;
-        String message = userName + " [" + board.getPlayerToken() + "]: " + chatTextField.getText() + "\n";
-        output.writeObject(new ChatMessage("Board", gameName, userName, message));
-        output.flush();
-        chatTextField.setText("");
-    }
-
-    public void onChatKeyPressed(KeyEvent keyEvent) throws IOException {
-        if (keyEvent.getCode().getCode() == 10) {
-            onSendButtonClicked();
+            });
+        } else if (result.charAt(0) == 'O') {
+            Platform.runLater(() -> {
+                gameLabel.setText("O won!");
+                ScoreBoardO.setText("" + ++oWin);
+                updateGameHistory("O");
+                try {
+                    gameEnd(winningLabels);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        } else if (result.charAt(0) == 'D') {
+            Platform.runLater(() -> {
+                gameLabel.setText("Draw Game");
+                ScoreBoardDraw.setText("" + ++draw);
+                updateGameHistory("Draw");
+                try {
+                    gameEnd(null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         }
+    }
+
+    @FXML
+    public void updateGameHistory(String result) {
+        Platform.runLater(() -> gameHistory.getItems().add(board.endStateHistory(result)));
     }
 
     public void returnToLobby() throws IOException {
@@ -207,5 +212,12 @@ public class BoardUI {
             stage.setScene(scene);
             stage.show();
         });
+    }
+
+    public void onSendButtonClicked() throws IOException {
+        if (Objects.equals(chatTextField.getText(), "")) return;
+        String message = "\n[" + userName + "]:" + chatTextField.getText();
+        output.writeObject(new ChatMessage("Board", gameName, userName, message));
+        output.flush();
     }
 }
