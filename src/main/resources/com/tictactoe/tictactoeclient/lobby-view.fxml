@@ -20,7 +20,7 @@
       <Button fx:id="vsAIButton" disable="true" layoutX="137.0" layoutY="330.0" mnemonicParsing="false" onAction="#onVsAIButtonPressed" text="VS AI Player" />
       <Button fx:id="mainMenuButton" layoutX="457.0" layoutY="14.0" mnemonicParsing="false" onAction="#onMainMenuButtonPressed" text="Return to Main Menu" />
       <TextArea fx:id="ta" disable="true" editable="false" layoutX="308.0" layoutY="50.0" prefHeight="305.0" prefWidth="281.0" />
-      <Button fx:id="sendButton" disable="true" layoutX="540.0" layoutY="361.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="49.0" text="Send" />
-      <TextField fx:id="chatTextField" disable="true" layoutX="308.0" layoutY="361.0" prefHeight="25.0" prefWidth="226.0" />
+      <Button fx:id="sendButton" disable="true" layoutX="540.0" layoutY="361.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="49.0" onMouseClicked="#onSendButtonClicked" text="Send" />
+      <TextField fx:id="chatTextField" disable="true" layoutX="308.0" layoutY="361.0" prefHeight="25.0" prefWidth="226.0" onKeyPressed="#onChatKeyPressed" />
     </AnchorPane>
 </AnchorPane>

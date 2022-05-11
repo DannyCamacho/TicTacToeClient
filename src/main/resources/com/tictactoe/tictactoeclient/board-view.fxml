@@ -105,5 +105,5 @@
    <Button layoutX="484.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#returnToLobby" text="Return to Lobby" />
    <Button layoutX="531.0" layoutY="363.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="55.0" onMouseClicked="#onSendButtonClicked" text="Send" />
    <TextArea fx:id="ta" editable="false" layoutX="324.0" layoutY="193.0" prefHeight="165.0" prefWidth="262.0" />
-   <TextField fx:id="chatTextField" layoutX="324.0" layoutY="363.0" prefHeight="25.0" prefWidth="202.0" />
+   <TextField fx:id="chatTextField" layoutX="324.0" layoutY="363.0" prefHeight="25.0" prefWidth="202.0" onKeyPressed="#onChatKeyPressed" />
 </AnchorPane>

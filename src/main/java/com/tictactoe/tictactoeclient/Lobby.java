@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -14,7 +15,7 @@ import java.util.Objects;
 
 public class Lobby {
     private Socket socket;
-    private String hostname = "localhost";
+    private String hostname = "192.168.1.218";
     private int port = 8000;
     private static String userName;
     private static boolean connected = false;
@@ -150,7 +151,21 @@ public class Lobby {
                 stage.show();
             });
         } else if (message instanceof ChatMessage) {
-            Platform.runLater(() -> ta.appendText(((ChatMessage) message).message()));
+            Platform.runLater(() -> ta.appendText(((ChatMessage)message).message()));
+        }
+    }
+
+    public void onSendButtonClicked() throws IOException {
+        if (Objects.equals(chatTextField.getText(), "")) return;
+        String message = "\n" + userName + ": " + chatTextField.getText();
+        output.writeObject(new ChatMessage("Lobby", null, userName, message));
+        output.flush();
+        chatTextField.setText("");
+    }
+
+    public void onChatKeyPressed(KeyEvent keyEvent) throws IOException {
+        if (keyEvent.getCode().getCode() == 10) {
+            onSendButtonClicked();
         }
     }
 
