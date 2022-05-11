@@ -157,7 +157,7 @@ public class Lobby {
 
     public void onSendButtonClicked() throws IOException {
         if (Objects.equals(chatTextField.getText(), "")) return;
-        String message = "\n" + userName + ": " + chatTextField.getText();
+        String message = userName + ": " + chatTextField.getText() + "\n";
         output.writeObject(new ChatMessage("Lobby", null, userName, message));
         output.flush();
         chatTextField.setText("");

@@ -72,10 +72,12 @@ public class BoardUI {
         } else if (message instanceof ChatMessage) {
             Platform.runLater(() -> ta.appendText(((ChatMessage) message).message()));
         } else if (message instanceof UpdateGameHistory) {
-            ScoreBoardX.setText("" + ((UpdateGameHistory) message).xodWins()[0]);
-            ScoreBoardO.setText("" + ((UpdateGameHistory) message).xodWins()[1]);
-            ScoreBoardDraw.setText("" + ((UpdateGameHistory) message).xodWins()[2]);
-            Platform.runLater(() -> gameHistory.getItems().clear());
+            Platform.runLater(() -> {
+                ScoreBoardX.setText(((UpdateGameHistory) message).xodWins()[0]);
+                ScoreBoardO.setText(((UpdateGameHistory) message).xodWins()[1]);
+                ScoreBoardDraw.setText(((UpdateGameHistory) message).xodWins()[2]);
+                gameHistory.getItems().clear();
+            });
             for (String history : ((UpdateGameHistory) message).gameHistory()) {
                 Platform.runLater(() -> gameHistory.getItems().add(history));
             }
@@ -183,7 +185,7 @@ public class BoardUI {
 
     public void onSendButtonClicked() throws IOException {
         if (Objects.equals(chatTextField.getText(), "")) return;
-        String message = "\n" + userName + " [ " + board.getPlayerToken() + "]: " + chatTextField.getText();
+        String message = userName + " [" + board.getPlayerToken() + "]: " + chatTextField.getText() + "\n";
         output.writeObject(new ChatMessage("Board", gameName, userName, message));
         output.flush();
         chatTextField.setText("");
