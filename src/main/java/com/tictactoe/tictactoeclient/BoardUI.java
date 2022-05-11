@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
@@ -213,8 +214,15 @@ public class BoardUI {
 
     public void onSendButtonClicked() throws IOException {
         if (Objects.equals(chatTextField.getText(), "")) return;
-        String message = "\n[" + userName + "]:" + chatTextField.getText();
+        String message = "\n" + userName + " [ " + board.getPlayerToken() + "]: " + chatTextField.getText();
         output.writeObject(new ChatMessage("Board", gameName, userName, message));
         output.flush();
+        chatTextField.setText("");
+    }
+
+    public void onChatKeyPressed(KeyEvent keyEvent) throws IOException {
+        if (keyEvent.getCode().getCode() == 10) {
+            onSendButtonClicked();
+        }
     }
 }
