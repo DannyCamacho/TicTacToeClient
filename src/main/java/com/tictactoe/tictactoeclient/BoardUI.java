@@ -17,9 +17,11 @@ import java.io.ObjectOutputStream;
 import java.util.*;
 
 public class BoardUI {
-    public TextArea ta;
-    public TextField chatTextField;
     private ObjectOutputStream output;
+    @FXML
+    public TextArea ta;
+    @FXML
+    public TextField chatTextField;
     @FXML
     private ListView<String> gameHistory;
     @FXML
@@ -71,10 +73,12 @@ public class BoardUI {
                 board.setCurrentToken(((UpdateGame)message).currentToken());
                 updateBoardUI();
                 checkIfGameIsOver(((UpdateGame) message).result());
+                if (board.getPlayerToken() == 'S') Platform.runLater(() -> winningLine.setVisible(false));
             }
         } else if (message instanceof ChatMessage) {
             Platform.runLater(() -> ta.appendText(((ChatMessage)message).message()));
         } else if (message instanceof UpdateGameHistory) {
+            System.out.println(Arrays.toString(((UpdateGameHistory) message).xodWins()) + " " + Arrays.toString(((UpdateGameHistory) message).gameHistory()));
             Platform.runLater(() -> {
                 ScoreBoardX.setText(((UpdateGameHistory)message).xodWins()[0]);
                 ScoreBoardO.setText(((UpdateGameHistory)message).xodWins()[1]);
@@ -188,7 +192,7 @@ public class BoardUI {
 
     public void onSendButtonClicked() throws IOException {
         if (Objects.equals(chatTextField.getText(), "")) return;
-        String message = userName + " [" + board.getPlayerToken() + "]: " + chatTextField.getText() + "\n";
+        String message = "[" + userName + "](" + board.getPlayerToken() + "): " + chatTextField.getText() + "\n";
         output.writeObject(new ChatMessage("Board", gameName, userName, message));
         output.flush();
         chatTextField.setText("");
