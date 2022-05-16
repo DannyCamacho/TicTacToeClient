@@ -195,7 +195,7 @@ public class BoardUI {
 
     public void onSendButtonClicked() throws IOException {
         if (Objects.equals(chatTextField.getText(), "")) return;
-        String message = "[" + board.getPlayerToken() + "]" + userName + ": " + chatTextField.getText() + "\n";
+        String message = "[" + board.getPlayerToken() + "][" + userName + "]: " + chatTextField.getText() + "\n";
         output.writeObject(new ChatMessage("Board", gameName, userName, message));
         output.flush();
         chatTextField.setText("");
