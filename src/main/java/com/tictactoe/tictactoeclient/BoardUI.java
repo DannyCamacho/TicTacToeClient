@@ -71,6 +71,7 @@ public class BoardUI {
             } else if (Objects.equals(((UpdateGame)message).result(), "Waiting")) {
                 board.setBoard(((UpdateGame)message).boardState());
                 board.setCurrentToken(((UpdateGame)message).currentToken());
+                updateBoardUI();
             } else {
                 board.setBoard(((UpdateGame)message).boardState());
                 board.setCurrentToken(((UpdateGame)message).currentToken());
