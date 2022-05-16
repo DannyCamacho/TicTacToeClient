@@ -32,8 +32,12 @@ public class ReadThread extends Thread {
                     } else {
                         board.update(message);
                     }
-                } else if (message instanceof ServerConnection && !((ServerConnection) message).connection()) {
-                    break;
+                } else if (message instanceof ServerConnection) {
+                    if (((ServerConnection) message).connection()) {
+                        lobby.update(message);
+                    } else {
+                        break;
+                    }
                 } else if (message instanceof UpdateGameHistory) {
                     board.update(message);
                 } else {
