@@ -62,7 +62,7 @@ public class BoardUI {
                     gameLabel.setText("Tic-Tac-Toe");
                     ta.appendText("Connected to game " + gameName + ".\n");
                 });
-            } else if (Objects.equals(((UpdateGame) message).result(), "End")) {
+            } else if (Objects.equals(((UpdateGame)message).result(), "End")) {
                 board.setBoard(((UpdateGame)message).boardState());
                 board.setCurrentToken(((UpdateGame)message).currentToken());
                 if (board.getPlayerToken() != 'S') startButton.setVisible(true);
@@ -73,12 +73,12 @@ public class BoardUI {
                 checkIfGameIsOver(((UpdateGame) message).result());
             }
         } else if (message instanceof ChatMessage) {
-            Platform.runLater(() -> ta.appendText(((ChatMessage) message).message()));
+            Platform.runLater(() -> ta.appendText(((ChatMessage)message).message()));
         } else if (message instanceof UpdateGameHistory) {
             Platform.runLater(() -> {
-                ScoreBoardX.setText(((UpdateGameHistory) message).xodWins()[0]);
-                ScoreBoardO.setText(((UpdateGameHistory) message).xodWins()[1]);
-                ScoreBoardDraw.setText(((UpdateGameHistory) message).xodWins()[2]);
+                ScoreBoardX.setText(((UpdateGameHistory)message).xodWins()[0]);
+                ScoreBoardO.setText(((UpdateGameHistory)message).xodWins()[1]);
+                ScoreBoardDraw.setText(((UpdateGameHistory)message).xodWins()[2]);
                 gameHistory.getItems().clear();
             });
             for (String history : ((UpdateGameHistory) message).gameHistory()) {
