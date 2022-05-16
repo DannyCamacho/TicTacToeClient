@@ -58,7 +58,10 @@ public class BoardUI {
                 board.setPlayerToken(((UpdateGame) message).currentToken());
                 if (board.getPlayerToken() == 'S') startButton.setVisible(false);
                 updateBoardUI();
-                Platform.runLater(() -> gameLabel.setText("Tic-Tac-Toe"));
+                Platform.runLater(() -> {
+                    gameLabel.setText("Tic-Tac-Toe");
+                    ta.appendText("Connected to game " + gameName + ".\n");
+                });
             } else if (Objects.equals(((UpdateGame) message).result(), "End")) {
                 board.setBoard(((UpdateGame)message).boardState());
                 board.setCurrentToken(((UpdateGame)message).currentToken());
