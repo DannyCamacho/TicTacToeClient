@@ -68,6 +68,9 @@ public class BoardUI {
                 board.setBoard(((UpdateGame)message).boardState());
                 board.setCurrentToken(((UpdateGame)message).currentToken());
                 if (board.getPlayerToken() != 'S') startButton.setVisible(true);
+            } else if (Objects.equals(((UpdateGame)message).result(), "Waiting")) {
+                board.setBoard(((UpdateGame)message).boardState());
+                board.setCurrentToken(((UpdateGame)message).currentToken());
             } else {
                 board.setBoard(((UpdateGame)message).boardState());
                 board.setCurrentToken(((UpdateGame)message).currentToken());
@@ -78,7 +81,6 @@ public class BoardUI {
         } else if (message instanceof ChatMessage) {
             Platform.runLater(() -> ta.appendText(((ChatMessage)message).message()));
         } else if (message instanceof UpdateGameHistory) {
-            System.out.println(Arrays.toString(((UpdateGameHistory) message).xodWins()) + " " + Arrays.toString(((UpdateGameHistory) message).gameHistory()));
             Platform.runLater(() -> {
                 ScoreBoardX.setText(((UpdateGameHistory)message).xodWins()[0]);
                 ScoreBoardO.setText(((UpdateGameHistory)message).xodWins()[1]);
@@ -192,7 +194,7 @@ public class BoardUI {
 
     public void onSendButtonClicked() throws IOException {
         if (Objects.equals(chatTextField.getText(), "")) return;
-        String message = "[" + userName + "](" + board.getPlayerToken() + "): " + chatTextField.getText() + "\n";
+        String message = "[" + board.getPlayerToken() + "]" + userName + ": " + chatTextField.getText() + "\n";
         output.writeObject(new ChatMessage("Board", gameName, userName, message));
         output.flush();
         chatTextField.setText("");
