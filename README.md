@@ -9,7 +9,6 @@ Tic-Tac-Toe Online Server: https://github.com/DannyCamacho/TicTacToeServer
 
 ## Connect to Server
 
-![image](https://github.com/DannyCamacho/TicTacToeClient/assets/91514165/6cee70bf-d3f0-4356-a00f-d49d1cd64713)
 ![image](https://github.com/DannyCamacho/TicTacToeClient/assets/91514165/8e73c7fb-6c8d-460c-8e94-fa542a5c81b8)
 ![image](https://github.com/DannyCamacho/TicTacToeClient/assets/91514165/824e917f-8284-4360-ab0d-93a3faea0e1a)
 
