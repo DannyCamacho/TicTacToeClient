@@ -46,6 +46,7 @@ Tic-Tac-Toe Online Server: https://github.com/DannyCamacho/TicTacToeServer
 
 Player Disconnect and Accesses Local Game Mode
 
+![image](https://github.com/DannyCamacho/TicTacToeClient/assets/91514165/2e2b02f2-2e98-4c9d-a5ac-3550008a116e)
 ![image](https://github.com/DannyCamacho/TicTacToeClient/assets/91514165/d4e19766-9829-4298-8779-d3f83ae6e117)
 ![image](https://github.com/DannyCamacho/TicTacToeClient/assets/91514165/34552948-04d3-46a6-ad48-c028254ada6b)
 ![image](https://github.com/DannyCamacho/TicTacToeClient/assets/91514165/cd765440-5005-47bb-b093-92515306efd6)
